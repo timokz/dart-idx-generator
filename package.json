@@ -6,18 +6,24 @@
   "engines": {
     "vscode": "^1.74.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timokz/dart-idx-generator"
+  },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onCommand:dart-idx-generator.helloWorld"
+    "onLanguage:dart",
+    "onCommand:dart-idx-generator.generateFile",
+    "onCommand:dart-idx-generator.generateFolder"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "dart-idx-generator.helloWorld",
-        "title": "Generate index.dart file" 
+        "command": "dart-idx-generator.generateFile",
+        "title": "Dart: Generate index.dart file"
       }
     ]
   },
