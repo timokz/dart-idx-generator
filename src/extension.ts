@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('dart-idx-generator.generateFile', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from dart_idx_generator!');
+		vscode.window.showInformationMessage('Generated file for current directory!');
 
 
 
@@ -51,7 +51,12 @@ function generateIndexFile() {
 	let content = '';
 	files.then((files) => {
 		files.forEach((file) => {
-			content += `export '${file.fsPath.replace(currentFolder[0].uri.fsPath, '')}';\r\n`;
+
+			//remove *\* from beginning from beginning of the string, since its treated as an escape character
+			const path =
+				file.fsPath.replace(currentFolder[0].uri.fsPath, '').replace('\\', '');
+
+			content += `export '${path}';\r\n`;
 		});
 
 		// write the content to the index.dart file
