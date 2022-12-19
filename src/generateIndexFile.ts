@@ -15,6 +15,8 @@ export function generateIndexFile() {
     // get the files in the current folder
     const files = vscode.workspace.findFiles('**/*.dart');
 
+    console.log(currentFolder[0].uri.fsPath);
+
     // create the index.dart file
     const indexFile = vscode.Uri.file(`${currentFolder[0].uri.fsPath}/index.dart`);
 
@@ -29,7 +31,7 @@ export function generateIndexFile() {
             content += `export '${path}';\r\n`;
         });
 
-        // write the content to the index.dart file
+        // write the content to the index.dart file in the current folder
         vscode.workspace.fs.writeFile(indexFile, Buffer.from(content));
     });
 }

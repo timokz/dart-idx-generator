@@ -16,12 +16,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
-			'dart-idx-generator.generateFileForFolder',
+			'dart-idx-generator.generateFolder',
 			generateIndexFile
 		)
 	);
-
-
 
 }
 

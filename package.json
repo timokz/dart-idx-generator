@@ -23,7 +23,11 @@
     "commands": [
       {
         "command": "dart-idx-generator.generateFile",
-        "title": "Dart: Generate index.dart file"
+        "title": "Dart: Generate index.dart file for current directory"
+      },
+      {
+        "command": "dart-idx-generator.generateFiles",
+        "title": "Dart: Generate index.dart files for whole project"
       }
     ]
   },
