@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { deleteAllIndexFiles } from './deleteIndexFiles';
 import { generateIndexFile, generateIndexFilesForAllFolders } from './generateIndexFile';
 
 // This method is called when your extension is activated
@@ -18,6 +19,13 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand(
 			'dart-idx-generator.generateFiles',
 			generateIndexFilesForAllFolders
+		)
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand(
+			'dart-idx-generator.deleteFiles',
+			deleteAllIndexFiles
 		)
 	);
 

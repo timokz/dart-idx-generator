@@ -49,31 +49,48 @@ async function createIndexFiles(workspace: string, fileExtension: string): Promi
     }
 }
 
+// creates an index file in the given directory containing all files with the given file extension,
+// and exports all subdirectories containing an index file.
+// Additionally, calls itself for all subdirectories.
 async function createIndexFile(directory: string, fileExtension: string): Promise<void> {
     const files = await getFiles(directory, fileExtension);
     const subdirectories = await getDirectories(directory);
 
-    // currently uses dart syntax, but could be changed to use the 
-    // file extension to determine the syntax 
     if (files.length > 0 || subdirectories.length > 0) {
         let exports = '';
+        // export all files in the current directory, excluding the index file
         for (const file of files) {
             if (file !== 'index.dart') {
                 exports += exportStatements[fileExtension](file);
             }
-            for (const subdirectory of subdirectories) {
-                exports += `export '${subdirectory}';\n`;
-            }
-
-            const indexFileContent = `${exports}\n`;
-            fs.writeFileSync(path.join(directory, 'index.dart'), indexFileContent);
-
+            // create index files for all subdirectories, important
+            // to do this before exporting the subdirectories.
             for (const subdirectory of subdirectories) {
                 await createIndexFile(path.join(directory, subdirectory), fileExtension);
             }
+
+            // if a subdirectory contains an index file, export it in the current index file
+            for (const subdirectory of subdirectories) {
+
+                const subdirectoryPath = path.join(directory, subdirectory);
+                const indexFilePath = path.join(subdirectoryPath, 'index.dart');
+
+                console.log(indexFilePath);
+
+                if (fs.existsSync(indexFilePath)) {
+                    exports += exportStatements[fileExtension](subdirectory);
+                }
+            }
+
+            // finally, write the content to the file
+            const indexFileContent = `${exports}\n`;
+            fs.writeFileSync(path.join(directory, 'index.dart'), indexFileContent);
+
+
         }
     }
 }
+// get all directories in the given workspace 
 async function getDirectories(workspace: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
         fs.readdir(workspace, (err, files) => {
@@ -88,7 +105,7 @@ async function getDirectories(workspace: string): Promise<string[]> {
         });
     });
 }
-
+// get all files in the given directory with the given extension
 async function getFiles(directory: string, extension: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
         fs.readdir(directory, (err, files) => {
