@@ -38,8 +38,8 @@ export function generateIndexFile() {
     });
 }
 
-// generates an index file for every folder in the workspace containing dart files 
-// from the respective folder 
+// generates an index file for every folder in the workspace containing dart files, 
+// from the respective folder and all subfolders  
 export async function generateIndexFilesForAllFolders() {
 
     // check if a workspace is open
@@ -48,24 +48,28 @@ export async function generateIndexFilesForAllFolders() {
         return;
     }
 
+    // path to the workspace
+    const workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
     (async () => {
-        await createIndexFiles('/path/to/workspace');
+        await createIndexFiles(workspace);
     })();
 }
 
+// create index files for all folders in the given workspace
 async function createIndexFiles(workspace: string): Promise<void> {
     const directories = await getDirectories(workspace);
 
     for (const directory of directories) {
         const directoryPath = path.join(workspace, directory);
-        const files = await getFiles(directoryPath, '.ts');
+        const files = await getFiles(directoryPath, '.dart');
 
         const exports = files
-            .map((file) => `export * from './${file}';`)
+            .map((file) => `export '${file}';`)
             .join('\n');
 
         const indexFileContent = `${exports}\n`;
-        fs.writeFileSync(path.join(directoryPath, 'index.ts'), indexFileContent);
+        fs.writeFileSync(path.join(directoryPath, 'index.dart'), indexFileContent);
     }
 }
 
