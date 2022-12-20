@@ -16,7 +16,8 @@
   "activationEvents": [
     "onLanguage:dart",
     "onCommand:dart-idx-generator.generateFile",
-    "onCommand:dart-idx-generator.generateFiles"
+    "onCommand:dart-idx-generator.generateFiles",
+    "onCommand:dart-idx-generator.deleteIndexFiles"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -28,6 +29,10 @@
       {
         "command": "dart-idx-generator.generateFiles",
         "title": "Dart: Generate index.dart files for whole project"
+      },
+      {
+        "command": "dart-idx-generator.deleteIndexFiles",
+        "title": "Dart: Delete all index.dart files"
       }
     ]
   },

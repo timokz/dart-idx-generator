@@ -24,7 +24,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
-			'dart-idx-generator.deleteFiles',
+			'dart-idx-generator.deleteIndexFiles',
 			deleteAllIndexFiles
 		)
 	);
