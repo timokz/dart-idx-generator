@@ -14,30 +14,12 @@ export function generateIndexFile() {
 
     const currentFolder = vscode.workspace.workspaceFolders;
 
-    // get the files in the current folder
-    const files = vscode.workspace.findFiles('**/*.dart');
-
-    console.log(currentFolder[0].uri.fsPath);
-
-    // create the index.dart file
-    const indexFile = vscode.Uri.file(`${currentFolder[0].uri.fsPath}/index.dart`);
-
-    // create the content of the index.dart file
-    let content = '';
-    files.then((files) => {
-        files.forEach((file) => {
-
-            //remove *\* from beginning of the string, since its treated as an escape character
-            const path = file.fsPath.replace(currentFolder[0].uri.fsPath, '').replace('\\', '');
-
-            content += `export '${path}';\r\n`;
-        });
-
-        // write the content to the index.dart file in the current folder
-        vscode.workspace.fs.writeFile(indexFile, Buffer.from(content));
-    });
+    (async () => {
+        await createIndexFile(currentFolder.toString(), '.dart');
+    })();
 }
 
+// Called when the user executes the command "dart-idx-generator.generateIndexFilesForAllFolders" from the command palette.
 // generates an index file for every folder in the workspace containing dart files, 
 // from the respective folder and all subfolders  
 export async function generateIndexFilesForAllFolders() {
@@ -52,28 +34,44 @@ export async function generateIndexFilesForAllFolders() {
     const workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
     (async () => {
-        await createIndexFiles(workspace);
+        await createIndexFiles(workspace, '.dart');
     })();
 }
 
 // create index files for all folders in the given workspace
-async function createIndexFiles(workspace: string): Promise<void> {
+async function createIndexFiles(workspace: string, fileExtension: string): Promise<void> {
     const directories = await getDirectories(workspace);
 
     for (const directory of directories) {
         const directoryPath = path.join(workspace, directory);
-        const files = await getFiles(directoryPath, '.dart');
-
-        const exports = files
-            .map((file) => `export '${file}';`)
-            .join('\n');
-
-        const indexFileContent = `${exports}\n`;
-        fs.writeFileSync(path.join(directoryPath, 'index.dart'), indexFileContent);
+        await createIndexFile(directoryPath, fileExtension);
     }
 }
 
-// get all directories in the workspace
+async function createIndexFile(directory: string, fileExtension: string): Promise<void> {
+    const files = await getFiles(directory, fileExtension);
+    const subdirectories = await getDirectories(directory);
+
+    // currently uses dart syntax, but could be changed to use the 
+    // file extension to determine the syntax 
+    if (files.length > 0 || subdirectories.length > 0) {
+        let exports = '';
+        for (const file of files) {
+            exports += `export '${file}';\n`;
+        }
+        for (const subdirectory of subdirectories) {
+            exports += `export '${subdirectory}';\n`;
+        }
+
+        const indexFileContent = `${exports}\n`;
+        fs.writeFileSync(path.join(directory, 'index.dart'), indexFileContent);
+
+        for (const subdirectory of subdirectories) {
+            await createIndexFile(path.join(directory, subdirectory), fileExtension);
+        }
+    }
+}
+
 async function getDirectories(workspace: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
         fs.readdir(workspace, (err, files) => {
@@ -88,7 +86,6 @@ async function getDirectories(workspace: string): Promise<string[]> {
         });
     });
 }
-
 
 async function getFiles(directory: string, extension: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
