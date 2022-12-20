@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { exportStatements } from './exportstatement';
 
 /// Called when the user executes the command "dart-idx-generator.generateFile" from the command palette. 
 /// Generates an index.dart file in the current folder containing all dart files in the current folder
-export function generateIndexFile() {
+export async function generateIndexFile() {
 
     // check if a workspace is open
     if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
@@ -57,21 +58,22 @@ async function createIndexFile(directory: string, fileExtension: string): Promis
     if (files.length > 0 || subdirectories.length > 0) {
         let exports = '';
         for (const file of files) {
-            exports += `export '${file}';\n`;
-        }
-        for (const subdirectory of subdirectories) {
-            exports += `export '${subdirectory}';\n`;
-        }
+            if (file !== 'index.dart') {
+                exports += exportStatements[fileExtension](file);
+            }
+            for (const subdirectory of subdirectories) {
+                exports += `export '${subdirectory}';\n`;
+            }
 
-        const indexFileContent = `${exports}\n`;
-        fs.writeFileSync(path.join(directory, 'index.dart'), indexFileContent);
+            const indexFileContent = `${exports}\n`;
+            fs.writeFileSync(path.join(directory, 'index.dart'), indexFileContent);
 
-        for (const subdirectory of subdirectories) {
-            await createIndexFile(path.join(directory, subdirectory), fileExtension);
+            for (const subdirectory of subdirectories) {
+                await createIndexFile(path.join(directory, subdirectory), fileExtension);
+            }
         }
     }
 }
-
 async function getDirectories(workspace: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
         fs.readdir(workspace, (err, files) => {
@@ -99,4 +101,3 @@ async function getFiles(directory: string, extension: string): Promise<string[]>
         });
     });
 }
-
