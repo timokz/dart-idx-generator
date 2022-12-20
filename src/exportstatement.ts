@@ -7,7 +7,7 @@ export interface ExportStatement {
 }
 
 export const exportStatements: { [key: string]: ExportStatement } = {
-    '.ts': (file: string) => `export * from './${file}'\n;`,
+    '.ts': (file: string) => `export * from './${file}';\n`,
     '.js': (file: string) => `module.exports = require('./${file}');\n`,
-    '.dart': (file: string) => `export '${file}'\n;`,
+    '.dart': (file: string) => `export '${file}';\n`,
 };
