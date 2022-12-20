@@ -1,5 +1,6 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import * as vscode from 'vscode';
-let fs = require("fs");
 
 /// Called when the user executes the command "dart-idx-generator.generateFile" from the command palette. 
 /// Generates an index.dart file in the current folder containing all dart files in the current folder
@@ -26,7 +27,7 @@ export function generateIndexFile() {
     files.then((files) => {
         files.forEach((file) => {
 
-            //remove *\* from beginning from beginning of the string, since its treated as an escape character
+            //remove *\* from beginning of the string, since its treated as an escape character
             const path = file.fsPath.replace(currentFolder[0].uri.fsPath, '').replace('\\', '');
 
             content += `export '${path}';\r\n`;
@@ -39,7 +40,7 @@ export function generateIndexFile() {
 
 // generates an index file for every folder in the workspace containing dart files 
 // from the respective folder 
-export function generateIndexFilesForAllFolders() {
+export async function generateIndexFilesForAllFolders() {
 
     // check if a workspace is open
     if (!vscode.workspace.workspaceFolders) {
@@ -47,59 +48,54 @@ export function generateIndexFilesForAllFolders() {
         return;
     }
 
-    let vsWorkspaceFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    (async () => {
+        await createIndexFiles('/path/to/workspace');
+    })();
+}
 
-    // get a list of all directories containing dart files in the workspace
-    const currentFolders = vscode.workspace.workspaceFolders.filter(async (folder) => {
-        const files = vscode.workspace.findFiles('**/*.dart', folder.uri.fsPath);
-        return (await files).length > 0;
-    });
+async function createIndexFiles(workspace: string): Promise<void> {
+    const directories = await getDirectories(workspace);
 
-    // read contents of all folders in the workspace
-    fs.readdirSync(vscode.workspace.workspaceFolders[0].uri.fsPath).forEach((file: any) => {
-        console.log(file);
-    });
+    for (const directory of directories) {
+        const directoryPath = path.join(workspace, directory);
+        const files = await getFiles(directoryPath, '.ts');
 
-    // variable holding all folders containing dart files
-    let dartFolders: any[] = [];
+        const exports = files
+            .map((file) => `export * from './${file}';`)
+            .join('\n');
 
-    // get every folder, including subfolders, containing dart files 
-    fs.readdirSync(vscode.workspace.workspaceFolders[0].uri.fsPath, { withFileTypes: true })
-        .filter((dirent: any) => dirent.isDirectory())
-        .forEach((dirent: any) => {
-            // only use folders, not files
+        const indexFileContent = `${exports}\n`;
+        fs.writeFileSync(path.join(directoryPath, 'index.ts'), indexFileContent);
+    }
+}
 
-            // if the folder contains a dart file, add it to the list of folders containing dart files
-            if (fs.readdirSync(`${vsWorkspaceFolder}/${dirent.name}`).includes('*.dart')) {
-                dartFolders.push(dirent.name);
+// get all directories in the workspace
+async function getDirectories(workspace: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        fs.readdir(workspace, (err, files) => {
+            if (err) {
+                reject(err);
+            } else {
+                const directories = files.filter((file) => {
+                    return fs.statSync(`${workspace}/${file}`).isDirectory();
+                });
+                resolve(directories);
             }
-
-        });
-
-    console.log(dartFolders);
-
-    // for each folder in the workspace 
-    currentFolders.forEach((folder) => {
-
-        // get the files in the current folder
-        const files = vscode.workspace.findFiles('**/*.dart');
-
-        // create the index.dart file
-        const indexFile = vscode.Uri.file(`${folder.uri.fsPath}/index.dart`);
-
-        // create the content of the index.dart file
-        let content = '';
-        files.then((files) => {
-            files.forEach((file) => {
-
-                //remove *\* from beginning from beginning of the string, since its treated as an escape character
-                const path = file.fsPath.replace(folder.uri.fsPath, '').replace('\\', '');
-
-                content += `export '${path}';\r\n`;
-            });
-
-            // write the content to the index.dart file in the current folder 
-            vscode.workspace.fs.writeFile(indexFile, Buffer.from(content));
         });
     });
 }
+
+
+async function getFiles(directory: string, extension: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        fs.readdir(directory, (err, files) => {
+            if (err) {
+                reject(err);
+            } else {
+                const filteredFiles = files.filter((file) => file.endsWith(extension));
+                resolve(filteredFiles);
+            }
+        });
+    });
+}
+
