@@ -16,7 +16,7 @@
   "activationEvents": [
     "onLanguage:dart",
     "onCommand:dart-idx-generator.generateFile",
-    "onCommand:dart-idx-generator.generateFolder"
+    "onCommand:dart-idx-generator.generateFiles"
   ],
   "main": "./dist/extension.js",
   "contributes": {
