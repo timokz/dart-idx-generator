@@ -5,7 +5,8 @@ import { getDirectories, getFiles } from './util';
 
 
 /** Called when the user executes the command "dart-idx-generator.deleteIndexFiles" from the command palette. 
- * Mainly used for testing purposes.
+
+ * Mainly used for testing purposes, but will work in production.
 */
 export async function deleteAllIndexFiles() {
     // check if a workspace is open

@@ -11,3 +11,9 @@ export const exportStatements: { [key: string]: ExportStatement } = {
     '.js': (file: string) => `module.exports = require('./${file}');\n`,
     '.dart': (file: string) => `export '${file}';\n`,
 };
+
+export const specialDirectories: { [key: string]: string } = {
+    "dart": "lib",
+    "ts": "src"
+};
+

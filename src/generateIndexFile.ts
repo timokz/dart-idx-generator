@@ -18,6 +18,8 @@ export async function generateIndexFile() {
 
     const currentFolder = vscode.workspace.workspaceFolders;
 
+    console.log(currentFolder);
+
     (async () => {
         await createIndexFile(currentFolder.toString(), '.dart');
     })();
@@ -46,7 +48,9 @@ export async function generateIndexFilesForAllFolders(): Promise<void> {
 
 /** Creates index files for all folders in the given workspace */
 async function createIndexFiles(workspace: string, fileExtension: string): Promise<void> {
-    const directories = await getDirectories(workspace);
+
+    // only consider lib directory for now, consider other directories later or make it configurable
+    const directories = await getDirectories(path.join(workspace, "lib"));
 
     for (const directory of directories) {
         const directoryPath = path.join(workspace, directory);
@@ -60,6 +64,7 @@ async function createIndexFiles(workspace: string, fileExtension: string): Promi
 * Additionally, calls itself for all subdirectories.
 */
 async function createIndexFile(directory: string, fileExtension: string): Promise<void> {
+
     const files = await getFiles(directory, fileExtension);
     const subdirectories = await getDirectories(directory);
 
@@ -92,7 +97,6 @@ async function createIndexFile(directory: string, fileExtension: string): Promis
             // finally, write the content to the file
             const indexFileContent = `${exports}\n`;
             fs.writeFileSync(path.join(directory, 'index.dart'), indexFileContent);
-
         }
     }
 }

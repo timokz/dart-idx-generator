@@ -1,20 +1,16 @@
 # dart-idx-generator README
 
-This extension the deletion and generation of individual and project-wide .index files for dart and Flutter projects,
+This extension supports the deletion and generation of individual and project-wide .index files for dart and Flutter projects,
 reducing long and unnecessary important statements. 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
+- Generating an index file, exporting your current directories files.
+- Generating index files for your whole project. 
+- Deleting all index files in your project
 
 \!\[feature X\]\(images/feature-x.png\)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
 ## Extension Settings
 
