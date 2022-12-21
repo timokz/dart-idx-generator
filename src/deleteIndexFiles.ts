@@ -16,7 +16,8 @@ export async function deleteAllIndexFiles() {
     }
 
     // ask for confirmation
-    const confirmation = await vscode.window.showWarningMessage('Are you sure you want to delete all index files?', 'Yes', 'No');
+    //   const confirmation = await vscode.window.showWarningMessage('Are you sure you want to delete all index files?', 'Yes', 'No');
+    const confirmation = 'Yes'; // TODO debugging only
     if (confirmation !== 'Yes') {
         return;
     }

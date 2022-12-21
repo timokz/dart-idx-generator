@@ -29,11 +29,12 @@ export async function getFiles(directory: string, extension: string): Promise<st
 /** Get the path to the first file with the given extension in the given workspace, 
     * if there is no default directory like src or lib
 */
-async function findFile(workspace: string, fileExtension: string): Promise<string | undefined> {
+export async function findRoot(workspace: string, fileExtension: string): Promise<string | undefined> {
+    console.log('findRoot', workspace, fileExtension);
     const specialDirectory = path.join(workspace, specialDirectories[fileExtension]);
     if (await fs.promises.stat(specialDirectory).catch(() => undefined)) {
         // special directory exists, no need to search for .ts file
-        return undefined;
+        return specialDirectory;
     }
     const files = await fs.promises.readdir(workspace);
     for (const file of files) {
@@ -44,7 +45,7 @@ async function findFile(workspace: string, fileExtension: string): Promise<strin
     const directories = await fs.promises.readdir(workspace, { withFileTypes: true });
     for (const dirent of directories) {
         if (dirent.isDirectory()) {
-            const result = await findFile(path.join(workspace, dirent.name), fileExtension);
+            const result = await findRoot(path.join(workspace, dirent.name), fileExtension);
             if (result) {
                 return result;
             }

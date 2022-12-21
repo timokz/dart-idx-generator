@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { exportStatements, } from './exportstatement';
-import { getDirectories, getFiles } from './util';
+import { getDirectories, getFiles, findRoot } from './util';
 
 /**  Called when the user executes the command "dart-idx-generator.generateFile" from the command palette. 
 *
@@ -16,12 +16,13 @@ export async function generateIndexFile() {
         return;
     }
 
-    const currentFolder = vscode.workspace.workspaceFolders;
+    const currentFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    const current = findRoot(currentFolder, '.dart');
 
     console.log(currentFolder);
 
     (async () => {
-        await createIndexFile(currentFolder.toString(), '.dart');
+        await createIndexFile(current.toString(), '.dart');
     })();
 }
 
@@ -64,6 +65,8 @@ async function createIndexFiles(workspace: string, fileExtension: string): Promi
 * Additionally, calls itself for all subdirectories.
 */
 async function createIndexFile(directory: string, fileExtension: string): Promise<void> {
+
+    console.log("createIndexFile", directory, fileExtension);
 
     const files = await getFiles(directory, fileExtension);
     const subdirectories = await getDirectories(directory);
