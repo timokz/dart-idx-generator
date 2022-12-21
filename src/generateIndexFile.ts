@@ -78,7 +78,7 @@ async function createIndexFile(directory: string, fileExtension: string): Promis
                 console.log(indexFilePath);
 
                 if (fs.existsSync(indexFilePath)) {
-                    exports += exportStatements[fileExtension](subdirectory);
+                    exports += exportStatements[fileExtension](`${subdirectory}/index.dart`);
                 }
             }
 

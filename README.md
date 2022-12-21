@@ -1,7 +1,7 @@
 # dart-idx-generator README
 
-This is the README for your extension "dart-idx-generator". After writing up a brief description, we recommend including the following sections.
-
+This extension the deletion and generation of individual and project-wide .index files for dart and Flutter projects,
+reducing long and unnecessary important statements. 
 ## Features
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
