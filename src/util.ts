@@ -1,6 +1,4 @@
 import * as fs from 'fs';
-import * as path from 'path';
-import * as vscode from 'vscode';
 
 // get all directories in the given workspace 
 export async function getDirectories(workspace: string): Promise<string[]> {

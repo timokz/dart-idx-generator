@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { exportStatements } from './exportstatement';
+import { exportStatements, } from './exportstatement';
+import { getDirectories, getFiles } from './util';
 
 /// Called when the user executes the command "dart-idx-generator.generateFile" from the command palette. 
 /// Generates an index.dart file in the current folder containing all dart files in the current folder
@@ -89,32 +90,4 @@ async function createIndexFile(directory: string, fileExtension: string): Promis
 
         }
     }
-}
-// get all directories in the given workspace 
-async function getDirectories(workspace: string): Promise<string[]> {
-    return new Promise((resolve, reject) => {
-        fs.readdir(workspace, (err, files) => {
-            if (err) {
-                reject(err);
-            } else {
-                const directories = files.filter((file) => {
-                    return fs.statSync(`${workspace}/${file}`).isDirectory();
-                });
-                resolve(directories);
-            }
-        });
-    });
-}
-// get all files in the given directory with the given extension
-async function getFiles(directory: string, extension: string): Promise<string[]> {
-    return new Promise((resolve, reject) => {
-        fs.readdir(directory, (err, files) => {
-            if (err) {
-                reject(err);
-            } else {
-                const filteredFiles = files.filter((file) => file.endsWith(extension));
-                resolve(filteredFiles);
-            }
-        });
-    });
 }
