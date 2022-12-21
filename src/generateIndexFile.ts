@@ -17,13 +17,17 @@ export async function generateIndexFile() {
     }
 
     const currentFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
     const current = findRoot(currentFolder, '.dart');
 
-    console.log(currentFolder);
+    current.then((value) => {
+        console.log('generateIndexFile current:', value);
 
-    (async () => {
-        await createIndexFile(current.toString(), '.dart');
-    })();
+        (async () => {
+            await createIndexFile(value, '.dart');
+        })();
+    });
+
 }
 
 /** Called when the user executes the command "dart-idx-generator.generateIndexFilesForAllFolders" from the command palette.
@@ -85,21 +89,26 @@ async function createIndexFile(directory: string, fileExtension: string): Promis
             }
 
             // if a subdirectory contains an index file, export it in the current index file
-            for (const subdirectory of subdirectories) {
-
-                const subdirectoryPath = path.join(directory, subdirectory);
-                const indexFilePath = path.join(subdirectoryPath, 'index.dart');
-
-                console.log(indexFilePath);
-
-                if (fs.existsSync(indexFilePath)) {
-                    exports += exportStatements[fileExtension](`${subdirectory}/index.dart`);
-                }
-            }
+            exports = exportSubDirs(exports);
 
             // finally, write the content to the file
             const indexFileContent = `${exports}\n`;
             fs.writeFileSync(path.join(directory, 'index.dart'), indexFileContent);
         }
+    }
+
+    function exportSubDirs(exports: string) {
+        for (const subdirectory of subdirectories) {
+
+            const subdirectoryPath = path.join(directory, subdirectory);
+            const indexFilePath = path.join(subdirectoryPath, 'index.dart');
+
+            console.log(indexFilePath);
+
+            if (fs.existsSync(indexFilePath)) {
+                exports += exportStatements[fileExtension](`${subdirectory}/index.dart`);
+            }
+        }
+        return exports;
     }
 }

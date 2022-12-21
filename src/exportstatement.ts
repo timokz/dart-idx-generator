@@ -13,7 +13,11 @@ export const exportStatements: { [key: string]: ExportStatement } = {
 };
 
 export const specialDirectories: { [key: string]: string } = {
-    "dart": "lib",
-    "ts": "src"
+    'ts': 'src',
+    'js': 'src',
+    'dart': 'lib',
+    '.ts': 'src',
+    '.js': 'src',
+    '.dart': 'lib',
 };
 
