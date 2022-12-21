@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-// get all directories in the given workspace 
+/** Get all directories in the given workspace */
 export async function getDirectories(workspace: string): Promise<string[]> {
     try {
         const files = await fs.promises.readdir(workspace);
@@ -13,7 +13,7 @@ export async function getDirectories(workspace: string): Promise<string[]> {
     }
 }
 
-// get all files in the given directory with the given extension
+/** Get all files in the given directory with the given extension */
 export async function getFiles(directory: string, extension: string): Promise<string[]> {
     try {
         const files = await fs.promises.readdir(directory);
