@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
 import * as fs from 'fs';
-import { getDirectories, getFiles } from './util';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import { getDirectories } from './util';
 
 
 /** Called when the user executes the command "dart-idx-generator.deleteIndexFiles" from the command palette. 
@@ -26,8 +26,6 @@ export async function deleteAllIndexFiles() {
 
     // path to the workspace
     const workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
-
-
 
     const directories = await getDirectories(workspace);
 

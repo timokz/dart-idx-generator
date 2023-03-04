@@ -27,13 +27,20 @@ export async function getFiles(directory: string, extension: string): Promise<st
 }
 
 /** Get the path to the first file with the given extension in the given workspace, 
-* if there is no default directory like src or lib
+*   if there is no default directory like src or lib
 */
 export async function findRoot(workspace: string, fileExtension: string): Promise<string> {
     console.log('findRoot', workspace, fileExtension);
     let specialDirectory = path.join(workspace, specialDirectories[fileExtension]);
-    while (!await fs.promises.stat(specialDirectory).catch(() => undefined) && workspace !== '/') {
+
+    while (!isRoot(workspace) && !await fs.promises.stat(specialDirectory).catch(() => undefined)
+        // if workspace is root, do not go up one directory
+    ) {
+        console.log('findRoot', workspace, fileExtension, 'up');
         workspace = path.dirname(workspace);
+        if (isRoot(workspace)) {
+            break;
+        }
         specialDirectory = path.join(workspace, specialDirectories[fileExtension]);
     }
     if (workspace === '/') {
@@ -57,4 +64,10 @@ export async function findRoot(workspace: string, fileExtension: string): Promis
     } else {
         return specialDirectory;
     }
+}
+
+/** Checks for root directory */
+export function isRoot(workspace: string): boolean {
+    return workspace === '/' // UNIX
+        || /^[a-zA-Z]:\\$/.test(workspace); // Windows;
 }
