@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as vscode from 'vscode';
 import { specialDirectories } from './exportstatement';
 
 /** Get all directories in the given workspace */
@@ -33,37 +34,18 @@ export async function findRoot(workspace: string, fileExtension: string): Promis
     console.log('findRoot', workspace, fileExtension);
     let specialDirectory = path.join(workspace, specialDirectories[fileExtension]);
 
-    while (!isRoot(workspace) && !await fs.promises.stat(specialDirectory).catch(() => undefined)
-        // if workspace is root, do not go up one directory
-    ) {
+    while (!isRoot(workspace)) {
         console.log('findRoot', workspace, fileExtension, 'up');
-        workspace = path.dirname(workspace);
-        if (isRoot(workspace)) {
-            break;
+        const files =
+            await vscode.workspace.findFiles(`**/*${fileExtension}`, excludedDirectoriesRegex, 1, { base: specialDirectory });
+        if (files.length > 0) {
+            return path.dirname(files[0].fsPath);
         }
+        workspace = path.dirname(workspace);
         specialDirectory = path.join(workspace, specialDirectories[fileExtension]);
     }
-    if (workspace === '/') {
-        // special directory does not exist, search for .ts file
-        const files = await fs.promises.readdir(workspace);
-        for (const file of files) {
-            if (file.endsWith(fileExtension)) {
-                return workspace;
-            }
-        }
-        const directories = await fs.promises.readdir(workspace, { withFileTypes: true });
-        for (const dirent of directories) {
-            if (dirent.isDirectory()) {
-                const result = await findRoot(path.join(workspace, dirent.name), fileExtension);
-                if (result) {
-                    return result;
-                }
-            }
-        }
-        throw new Error(`No ${fileExtension} file found`);
-    } else {
-        return specialDirectory;
-    }
+
+    throw new Error(`No ${fileExtension} file found`);
 }
 
 /** Checks for root directory */

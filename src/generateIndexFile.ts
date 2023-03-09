@@ -20,6 +20,13 @@ export async function generateIndexFile() {
 
     const current = await findRoot(currentFolder, '.dart');
 
+    const dartFiles = await getFiles(current, '.dart');
+
+    if (dartFiles.length === 0) {
+        vscode.window.showWarningMessage('No .dart files found in this workspace.');
+        return;
+    }
+
     await createIndexFile(current, '.dart');
 
 }
