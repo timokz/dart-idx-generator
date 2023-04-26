@@ -32,7 +32,29 @@
         "command": "dart-idx-generator.deleteIndexFiles",
         "title": "Dart: Delete all index.dart files"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Dart Index Generator",
+      "properties": {
+        "dart-idx-generator.excludeFolders": {
+          "type": "array",
+          "description": "Folders that should be excluded from the index file generation",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dart-idx-generator.fileName": {
+          "type": "string",
+          "description": "Name scheme of the index file",
+          "default": "index.dart",
+          "enum": [
+            "index.dart",
+            "package_name.dart"
+          ]
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
