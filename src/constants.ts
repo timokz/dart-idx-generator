@@ -1,6 +1,6 @@
 
 // all general folders that can be excluded from being searched for files
-const excludedDirectories = ['**/node_modules/**',
+export const excludedDirectories = ['**/node_modules/**',
     '**/.git/**',
     '**/.vscode/**',
     '**/.dart_tool/**',
@@ -29,4 +29,4 @@ const excludedDirectories = ['**/node_modules/**',
     '**/bin/**',];
 
 // regex to exclude all directories from excludedDirectories
-const excludedDirectoriesRegex = (excludedDirectories.join('|'));
+export const excludedDirectoriesRegex = (excludedDirectories.join('|'));

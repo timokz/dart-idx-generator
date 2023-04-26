@@ -15,10 +15,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:dart",
-    "onCommand:dart-idx-generator.generateFile",
-    "onCommand:dart-idx-generator.generateFiles",
-    "onCommand:dart-idx-generator.deleteIndexFiles"
+    "onLanguage:dart"
   ],
   "main": "./dist/extension.js",
   "contributes": {

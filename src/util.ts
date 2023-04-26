@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { excludedDirectoriesRegex } from './constants';
 import { specialDirectories } from './exportstatement';
 
 /** Get all directories in the given workspace */
@@ -37,7 +38,7 @@ export async function findRoot(workspace: string, fileExtension: string): Promis
     while (!isRoot(workspace)) {
         console.log('findRoot', workspace, fileExtension, 'up');
         const files =
-            await vscode.workspace.findFiles(`**/*${fileExtension}`, excludedDirectoriesRegex, 1, { base: specialDirectory });
+            await vscode.workspace.findFiles(`**/*${fileExtension}`, excludedDirectoriesRegex, 1);
         if (files.length > 0) {
             return path.dirname(files[0].fsPath);
         }
