@@ -32,11 +32,11 @@ export async function getFiles(directory: string, extension: string): Promise<st
 *   if there is no default directory like src or lib
 */
 export async function findRoot(workspace: string, fileExtension: string): Promise<string> {
-    console.log('findRoot', workspace, fileExtension);
+    console.log('FINDROOT', workspace, fileExtension);
     let specialDirectory = path.join(workspace, specialDirectories[fileExtension]);
 
     while (!isRoot(workspace)) {
-        console.log('findRoot', workspace, fileExtension, 'up');
+        console.log('FINDROOT', workspace, fileExtension, 'up');
         const files =
             await vscode.workspace.findFiles(`**/*${fileExtension}`, excludedDirectoriesRegex, 1);
         if (files.length > 0) {
@@ -68,6 +68,8 @@ export function getCurrentFolder(): string | undefined {
     if (!currentFolder) {
         return undefined;
     }
+
+    console.log('GETCURRENTFOLDER: ', currentFolder.uri.fsPath);
 
     return currentFolder.uri.fsPath;
 }

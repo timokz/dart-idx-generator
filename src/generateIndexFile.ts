@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { exportStatements } from './exportstatement';
-import { findRoot, getDirectories, getFiles } from './util';
+import { findRoot, getCurrentFolder, getDirectories, getFiles } from './util';
 
 /**  Called when the user executes the command "dart-idx-generator.generateFile" from the command palette. 
 *
@@ -16,7 +16,8 @@ export async function generateIndexFile() {
         return;
     }
 
-    const currentFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    // path to the current folder, use workspace folder if no file is open
+    const currentFolder = getCurrentFolder() || vscode.workspace.workspaceFolders[0].uri.fsPath;
 
     const current = await findRoot(currentFolder, '.dart');
 
@@ -103,8 +104,6 @@ async function createIndexFile(directory: string, fileExtension: string): Promis
 
             const subdirectoryPath = path.join(directory, subdirectory);
             const indexFilePath = path.join(subdirectoryPath, 'index.dart');
-
-            console.log(indexFilePath);
 
             if (fs.existsSync(indexFilePath)) {
                 exports += exportStatements[fileExtension](`${subdirectory}/index.dart`);

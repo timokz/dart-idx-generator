@@ -10,7 +10,6 @@ import { getDirectories } from './util';
 */
 export async function deleteAllIndexFiles() {
 
-    console.log('deleteAllIndexFiles');
     // check if a workspace is open
     if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
         vscode.window.showErrorMessage('No workspace containing folders is open');
@@ -29,7 +28,7 @@ export async function deleteAllIndexFiles() {
 
     const directories = await getDirectories(workspace);
 
-    console.log('deleteAllIndexFiles directories:', directories);
+    console.log('DELETEALLINDEXFILES directories:', directories);
 
     for (const directory of directories) {
         const directoryPath = path.join(workspace, directory);
