@@ -34,6 +34,8 @@ export async function deleteAllIndexFiles() {
         const directoryPath = path.join(workspace, directory);
         await deleteIndexFile(directoryPath);
     }
+
+    vscode.window.showInformationMessage('All index files deleted');
 }
 
 async function deleteIndexFile(directory: string): Promise<void> {
@@ -43,7 +45,9 @@ async function deleteIndexFile(directory: string): Promise<void> {
     }
 
     const subdirectories = await getDirectories(directory);
+
     for (const subdirectory of subdirectories) {
-        await deleteIndexFile(path.join(directory, subdirectory));
+        const subdirectoryPath = path.join(directory, subdirectory);
+        await deleteIndexFile(subdirectoryPath);
     }
 }

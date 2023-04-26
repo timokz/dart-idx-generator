@@ -57,19 +57,21 @@ export function isRoot(workspace: string): boolean {
 
 /** Get the folder of the currently active file */
 export function getCurrentFolder(): string | undefined {
+
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
         return undefined;
     }
 
     const currentFile = editor.document.uri.fsPath;
-    const currentFolder = vscode.workspace.getWorkspaceFolder(vscode.Uri.file(currentFile));
+    // get the WHOLE path of the current file and remove the file name
+    const currentFolder = path.dirname(currentFile);
 
     if (!currentFolder) {
         return undefined;
     }
 
-    console.log('GETCURRENTFOLDER: ', currentFolder.uri.fsPath);
+    console.log('GETCURRENTFOLDER: ', currentFolder);
 
-    return currentFolder.uri.fsPath;
+    return currentFolder;
 }

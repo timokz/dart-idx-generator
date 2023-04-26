@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { excludedDirectoriesRegex } from './constants';
 import { exportStatements } from './exportstatement';
 import { findRoot, getCurrentFolder, getDirectories, getFiles } from './util';
 
@@ -18,6 +19,11 @@ export async function generateIndexFile() {
 
     // path to the current folder, use workspace folder if no file is open
     const currentFolder = getCurrentFolder() || vscode.workspace.workspaceFolders[0].uri.fsPath;
+
+    // terminate if the current folder is excluded
+    if (excludedDirectoriesRegex.match(currentFolder)) {
+        return;
+    }
 
     const current = await findRoot(currentFolder, '.dart');
 
