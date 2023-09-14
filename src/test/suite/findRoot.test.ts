@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import * as fs from 'fs';
-import { utils } from 'mocha';
 import * as path from 'path';
 import { findRoot } from '../../util';
 

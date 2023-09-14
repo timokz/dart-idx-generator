@@ -1,4 +1,9 @@
 
+enum FileTypes {
+    dart = '.dart',
+    ts = '.ts',
+    js = '.js',
+}
 // all general folders that can be excluded from being searched for files
 export const excludedDirectories = ['**/node_modules/**',
     '**/.git/**',
