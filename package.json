@@ -31,10 +31,13 @@
       {
         "command": "dart-idx-generator.deleteIndexFiles",
         "title": "Dart: Delete all index.dart files"
-      }
+      },
+      {
+        "command": "dartIndexGenerator.selectEntryPoint",
+        "title": "Select Entry Point"
+    }
     ],
     "configuration": {
-      "type": "object",
       "title": "Dart Index Generator",
       "properties": {
         "dart-idx-generator.excludeFolders": {
@@ -50,8 +53,19 @@
           "default": "index.dart",
           "enum": [
             "index.dart",
-            "package_name.dart"
+            "${package_name}.dart"
           ]
+        },
+        "dart-idx-generator.includeSubfolders": {
+          "type": "boolean",
+          "description": "Include subfolders in the index file generation",
+          "default": true
+        },
+        "dart-idx-generator.scope": {
+          "type": "string",
+          "description": "Specify the scope for index file generation (e.g., lib/)",
+          "default": "lib/"
+        
         }
       }
     }
