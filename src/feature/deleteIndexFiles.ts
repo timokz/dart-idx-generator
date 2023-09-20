@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
-import { getDirectories } from "./util";
+import { getDirectories } from "../utils/util";
 
 /** Called when the user executes the command "dart-idx-generator.deleteIndexFiles" from the command palette. 
 

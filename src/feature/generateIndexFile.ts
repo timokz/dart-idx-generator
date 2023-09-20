@@ -1,9 +1,15 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
-import { excludedDirectoriesRegex } from "./constants";
-import { exportStatements } from "./exportstatement";
-import { findRoot, getCurrentFolder, getDirectories, getFiles } from "./util";
+
+import { excludedDirectoriesRegex } from "../utils/constants";
+import { exportStatements } from "../utils/exportstatement";
+import {
+  findRoot,
+  getCurrentFolder,
+  getDirectories,
+  getFiles,
+} from "../utils/util";
 
 /**  Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
  *
