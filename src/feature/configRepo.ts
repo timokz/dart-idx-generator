@@ -1,13 +1,9 @@
-import { log } from "console";
 import * as vscode from "vscode";
 
-export function checkNameConfig(): string {
-  const config = vscode.workspace.getConfiguration("dartIndexGenerator");
-
-  log(config.has("fileName"));
+export function checkNameConfigDefault(): boolean {
+  const config = vscode.workspace.getConfiguration("dart-idx-generator");
 
   const fileName = config.get("fileName", "index.dart");
 
-  log("filename", fileName);
-  return fileName;
+  return fileName === "index.dart";
 }

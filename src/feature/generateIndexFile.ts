@@ -10,7 +10,7 @@ import {
   getDirectories,
   getFiles,
 } from "../utils/util";
-import { checkNameConfig } from "./configRepo";
+import { checkNameConfigDefault } from "./configRepo";
 
 /**  Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
  *
@@ -122,7 +122,9 @@ async function createIndexFile(
       exports = exportSubDirs(exports);
 
       // get the configuration for the file name from vscode settings
-      const fileName = checkNameConfig();
+      const fileName = checkNameConfigDefault()
+        ? "index.dart"
+        : path.basename(directory) + fileExtension;
 
       // finally, write the content to the file
       const indexFileContent = `${exports}\n`;
