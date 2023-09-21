@@ -106,6 +106,8 @@ export async function selectEntryPoint() {
     },
   };
 
+  vscode.window.showInformationMessage("Select the entry point");
+
   const selectedFile = await vscode.window.showOpenDialog(options);
 
   if (selectedFile && selectedFile.length > 0) {

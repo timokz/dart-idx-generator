@@ -35,7 +35,7 @@
       {
         "command": "dartIndexGenerator.selectEntryPoint",
         "title": "Select Entry Point"
-    }
+      }
     ],
     "configuration": {
       "title": "Dart Index Generator",
@@ -49,6 +49,9 @@
         },
         "dart-idx-generator.fileName": {
           "type": "string",
+          "markdownEnumDescriptions": [
+            "The index file will be named `index.dart`",
+            "The index file will be named `${package_name}.dart`"],
           "description": "Name scheme of the index file",
           "default": "index.dart",
           "enum": [
@@ -64,8 +67,17 @@
         "dart-idx-generator.scope": {
           "type": "string",
           "description": "Specify the scope for index file generation (e.g., lib/)",
-          "default": "lib/"
-        
+          "default": "lib/",
+          "enum": [
+            {
+              "value": "__file_picker__",
+              "description": "Open File Picker"
+            },
+            {
+              "value": "__edit_settings__",
+              "description": "Edit in settings.json"
+            }
+          ]
         }
       }
     }
@@ -86,7 +98,7 @@
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
-    "@types/vscode": "^1.74.0",
+    "@types/vscode": "^1.82.0",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.0",

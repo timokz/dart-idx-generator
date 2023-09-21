@@ -1,5 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import { log } from "console";
 import * as vscode from "vscode";
 import { deleteAllIndexFiles } from "./feature/deleteIndexFiles";
 import {
@@ -39,7 +40,8 @@ export async function activate(context: vscode.ExtensionContext) {
     )
   );
 
-  vscode.workspace.onDidChangeConfiguration((event) => {
+  vscode.workspace.onDidChangeConfiguration(async (event) => {
+    log("onDidChangeConfiguration");
     if (event.affectsConfiguration("dartIndexGenerator.scope")) {
       selectEntryPoint();
       vscode.window.showInformationMessage(
@@ -47,6 +49,7 @@ export async function activate(context: vscode.ExtensionContext) {
       );
     }
   });
+
   vscode.workspace.onDidSaveNotebookDocument((event) => {
     //TODO: generate index file on save
     vscode.window.showInformationMessage("Notebook saved");
@@ -54,4 +57,6 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+  log("deactivated");
+}
