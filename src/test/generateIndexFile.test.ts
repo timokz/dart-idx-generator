@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
+import { generateIndexFile } from "../feature/generateIndexFile";
 
 const testFolderUri = vscode.Uri.file(path.join(__dirname, "../test"));
 
