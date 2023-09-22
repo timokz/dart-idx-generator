@@ -4,6 +4,7 @@
   "description": "Generate index.dart files for your Flutter and Dart Projects.",
   "publisher": "timokz",
   "version": "0.0.1",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.74.0"
   },
