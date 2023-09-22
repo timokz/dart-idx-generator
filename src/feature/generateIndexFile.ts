@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
-
 import { excludedDirectoriesRegex } from "../utils/constants";
 import { exportStatements } from "../utils/exportstatement";
 import {
@@ -12,34 +11,22 @@ import {
 } from "../utils/util";
 import { checkNameConfigDefault } from "./configRepo";
 
-/**  Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
- *
+/**
+ * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
  * Generates an index.dart file in the current folder containing all dart files in the current folder
  */
 export async function generateIndexFile() {
-  // check if a workspace is open
-  if (
-    !vscode.workspace.workspaceFolders ||
-    vscode.workspace.workspaceFolders.length === 0
-  ) {
-    vscode.window.showErrorMessage("No workspace containing folders is open");
+  const workspaceFolder = getFirstWorkspaceFolder();
+  if (!workspaceFolder) {
     return;
   }
 
-  const config = vscode.workspace.getConfiguration("dartIndexGenerator");
-  const scope = config.get("scope", "lib/");
-
-  // path to the current folder, use workspace folder if no file is open
-  const currentFolder =
-    getCurrentFolder() || vscode.workspace.workspaceFolders[0].uri.fsPath;
-
-  // terminate if the current folder is excluded
+  const currentFolder = getCurrentFolder() || workspaceFolder.uri.fsPath;
   if (excludedDirectoriesRegex.match(currentFolder)) {
     return;
   }
 
   const current = await findRoot(currentFolder, ".dart");
-
   const dartFiles = await getFiles(current, ".dart");
 
   if (dartFiles.length === 0) {
@@ -50,36 +37,41 @@ export async function generateIndexFile() {
   await createIndexFile(current, ".dart");
 }
 
-/** Called when the user executes the command "dart-idx-generator.generateIndexFilesForAllFolders" from the command palette.
-
-* Generates an index file for every folder in the workspace containing dart files, 
-* from the respective folder and all subfolders  
-*/
+/**
+ * Called when the user executes the command "dart-idx-generator.generateIndexFilesForAllFolders" from the command palette.
+ * Generates an index file for every folder in the workspace containing dart files,
+ * from the respective folder and all subfolders
+ */
 export async function generateIndexFilesForAllFolders(): Promise<void> {
-  // check if a workspace is open
-  if (!vscode.workspace.workspaceFolders) {
-    vscode.window.showErrorMessage("No workspace containing folders is open");
+  const workspaceFolder = getFirstWorkspaceFolder();
+  if (!workspaceFolder) {
     return;
   }
 
   try {
-    // path to the workspace
-    const workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
-
-    (async () => {
-      await createIndexFiles(workspace, ".dart");
-    })();
+    const workspace = workspaceFolder.uri.fsPath;
+    await createIndexFiles(workspace, ".dart");
   } catch (error) {
     vscode.window.showErrorMessage(error as string);
   }
 }
 
-/** Creates index files for all folders in the given workspace */
+function getFirstWorkspaceFolder(): vscode.WorkspaceFolder | null {
+  const { workspaceFolders } = vscode.workspace;
+  if (workspaceFolders && workspaceFolders.length > 0) {
+    return workspaceFolders[0];
+  }
+  vscode.window.showErrorMessage("No workspace containing folders is open");
+  return null;
+}
+
+/**
+ * Creates index files for all folders in the given workspace
+ */
 async function createIndexFiles(
   workspace: string,
   fileExtension: string
 ): Promise<void> {
-  // only consider lib directory for now, consider other directories later or make it configurable
   const directories = await getDirectories(path.join(workspace, "lib"));
 
   for (const directory of directories) {
@@ -88,8 +80,8 @@ async function createIndexFiles(
   }
 }
 
-/** Creates an index file in the given directory containing all files with the given file extension.
- *
+/**
+ * Creates an index file in the given directory containing all files with the given file extension.
  * Exports all subdirectories containing an index file.
  * Additionally, calls itself for all subdirectories.
  */
@@ -97,52 +89,80 @@ async function createIndexFile(
   directory: string,
   fileExtension: string
 ): Promise<void> {
-  console.log("createIndexFile", directory, fileExtension);
-
   const files = await getFiles(directory, fileExtension);
   const subdirectories = await getDirectories(directory);
 
   if (files.length > 0 || subdirectories.length > 0) {
     let exports = "";
-    // export all files in the current directory, excluding the index file
+
     for (const file of files) {
-      if (file !== "index.dart") {
-        exports += exportStatements[fileExtension](file);
-      }
-      // create index files for all subdirectories, important
-      // to do this before exporting the subdirectories.
-      for (const subdirectory of subdirectories) {
-        await createIndexFile(
-          path.join(directory, subdirectory),
-          fileExtension
-        );
-      }
+      exports = exportCurrentDirectoryFiles(exports, file, fileExtension);
+    }
 
-      // if a subdirectory contains an index file, export it in the current index file
-      exports = exportSubDirs(exports);
+    await createIndexFilesForSubdirectories(
+      subdirectories,
+      directory,
+      fileExtension
+    );
 
-      // get the configuration for the file name from vscode settings
-      const fileName = checkNameConfigDefault()
-        ? "index.dart"
-        : path.basename(directory) + fileExtension;
+    exports = exportSubDirectories(
+      exports,
+      subdirectories,
+      directory,
+      fileExtension
+    );
 
-      // finally, write the content to the file
-      const indexFileContent = `${exports}\n`;
-      fs.writeFileSync(path.join(directory, fileName), indexFileContent);
+    writeIndexFile(exports, directory, fileExtension);
+  }
+}
+
+function exportCurrentDirectoryFiles(
+  exports: string,
+  file: string,
+  fileExtension: string
+): string {
+  if (file !== "index.dart") {
+    exports += exportStatements[fileExtension](file);
+  }
+  return exports;
+}
+
+async function createIndexFilesForSubdirectories(
+  subdirectories: string[],
+  directory: string,
+  fileExtension: string
+): Promise<void> {
+  for (const subdirectory of subdirectories) {
+    await createIndexFile(path.join(directory, subdirectory), fileExtension);
+  }
+}
+
+function exportSubDirectories(
+  exports: string,
+  subdirectories: string[],
+  directory: string,
+  fileExtension: string
+): string {
+  for (const subdirectory of subdirectories) {
+    const subdirectoryPath = path.join(directory, subdirectory);
+    const indexFilePath = path.join(subdirectoryPath, "index.dart");
+
+    if (fs.existsSync(indexFilePath)) {
+      exports += exportStatements[fileExtension](`${subdirectory}/index.dart`);
     }
   }
+  return exports;
+}
 
-  function exportSubDirs(exports: string) {
-    for (const subdirectory of subdirectories) {
-      const subdirectoryPath = path.join(directory, subdirectory);
-      const indexFilePath = path.join(subdirectoryPath, "index.dart");
+function writeIndexFile(
+  exports: string,
+  directory: string,
+  fileExtension: string
+): void {
+  const fileName = checkNameConfigDefault()
+    ? "index.dart"
+    : path.basename(directory) + fileExtension;
 
-      if (fs.existsSync(indexFilePath)) {
-        exports += exportStatements[fileExtension](
-          `${subdirectory}/index.dart`
-        );
-      }
-    }
-    return exports;
-  }
+  const indexFileContent = `${exports}\n`;
+  fs.writeFileSync(path.join(directory, fileName), indexFileContent);
 }
