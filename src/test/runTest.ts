@@ -18,6 +18,8 @@ async function main() {
       extensionTestsPath,
       launchArgs: ["--disable-extensions"],
     });
+
+    console.log("Tests completed successfully");
   } catch (err) {
     console.error(err);
     console.error("Failed to run tests");

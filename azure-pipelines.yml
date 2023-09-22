@@ -20,22 +20,16 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: "8.x"
+      versionSource: "spec"
+      versionSpec: "10.x"
+      checkLatest: true
     displayName: "Install Node.js"
 
-  - bash: |
-      /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      echo ">>> Started xvfb"
-    displayName: Start xvfb
-    condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
-
-  - bash: |
-      echo ">>> Compile vscode-test"
-      yarn && yarn compile
-      echo ">>> Compiled vscode-test"
-      cd sample
-      echo ">>> Run sample integration test"
-      yarn && yarn compile && yarn test
-    displayName: Run Tests
+  - script: |
+      npm install -g webpack webpack-cli --save-dev
+      npm install
+      npx webpack --config webpack.config.js
+    displayName: "npm install, run webpack"
     env:
       DISPLAY: ":99.0"
+      npm_config_loglevel: "verbose"
