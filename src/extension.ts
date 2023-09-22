@@ -50,9 +50,10 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  vscode.workspace.onDidSaveNotebookDocument((event) => {
+  vscode.workspace.onDidSaveNotebookDocument(() => {
     //TODO: generate index file on save
     vscode.window.showInformationMessage("Notebook saved");
+    generateIndexFile();
   });
 }
 
