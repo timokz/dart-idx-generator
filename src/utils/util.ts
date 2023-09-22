@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
+import { checkNameConfigDefault } from "../feature/configRepo";
 import { excludedDirectoriesRegex } from "./constants";
-import { specialDirectories } from "./exportstatement";
+import { exportStatements, specialDirectories } from "./exportstatement";
 
 /** Get all directories in the given workspace */
 export async function getDirectories(workspace: string): Promise<string[]> {
@@ -115,4 +116,54 @@ export async function selectEntryPoint() {
 
     vscode.window.showInformationMessage(entryPointPath);
   }
+}
+/**
+ * Returns the first workspace folder if it exists, otherwise shows an error message and returns null.
+ * @returns The first workspace folder or null if none exist.
+ */
+export function getFirstWorkspaceFolder(): vscode.WorkspaceFolder | null {
+  const { workspaceFolders } = vscode.workspace;
+  if (workspaceFolders && workspaceFolders.length > 0) {
+    return workspaceFolders[0];
+  }
+  vscode.window.showErrorMessage("No workspace containing folders is open");
+  return null;
+}
+export function exportCurrentDirectoryFiles(
+  exports: string,
+  file: string,
+  fileExtension: string
+): string {
+  if (file !== "index.dart") {
+    exports += exportStatements[fileExtension](file);
+  }
+  return exports;
+}
+export function exportSubDirectories(
+  exports: string,
+  subdirectories: string[],
+  directory: string,
+  fileExtension: string
+): string {
+  for (const subdirectory of subdirectories) {
+    const subdirectoryPath: string = path.join(directory, subdirectory);
+    const indexFilePath: string = path.join(subdirectoryPath, "index.dart");
+
+    if (fs.existsSync(indexFilePath)) {
+      exports += exportStatements[fileExtension](`${subdirectory}/index.dart`);
+    }
+  }
+  return exports;
+}
+export function writeIndexFile(
+  exports: string,
+  directory: string,
+  fileExtension: string
+): void {
+  const fileName = checkNameConfigDefault()
+    ? "index.dart"
+    : path.basename(directory) + fileExtension;
+
+  const indexFileContent = `${exports}\n`;
+  fs.writeFileSync(path.join(directory, fileName), indexFileContent);
 }
