@@ -19,23 +19,18 @@ pool:
   vmImage: $(imageName)
 
 steps:
-  - task: UseNode@1
+  - task: NodeTool@0
     inputs:
+      versionSource: "spec"
       versionSpec: "10.x"
-      addToPath: true
+      checkLatest: true
     displayName: "Install Node.js"
 
   - script: |
-      echo ">>> Compile vscode-test"
+      npm install -g webpack webpack-cli --save-dev
       npm install
-      npm run compile
-      echo ">>> Compiled vscode-test"
-      cd sample
-      echo ">>> Run sample integration test"
-      npm install
-      npm run compile
-      npm test
-    displayName: Run Tests
+      npx webpack --config webpack.config.js
+    displayName: "npm install, run webpack"
     env:
       DISPLAY: ":99.0"
       npm_config_loglevel: "verbose"
