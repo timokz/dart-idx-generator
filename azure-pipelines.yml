@@ -1,24 +1,10 @@
 #  Courtesy of https://github.com/rkotze
 
 trigger:
-  branches:
-    include:
-      - main
-  tags:
-    include:
-      - v*
-
-strategy:
-  matrix:
-    linux:
-      imageName: "ubuntu-latest"
-    mac:
-      imageName: "macos-latest"
-    windows:
-      imageName: "windows-latest"
+  - master
 
 pool:
-  vmImage: $(imageName)
+  vmImage: ubuntu-16.04
 
 steps:
   - task: NodeTool@0
