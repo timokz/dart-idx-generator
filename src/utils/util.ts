@@ -102,8 +102,8 @@ export async function selectEntryPoint() {
     canSelectMany: false,
     openLabel: "Select Entry Point",
     filters: {
-      "Dart Files": ["dart"],
-      "All Files": ["*"],
+      dartFiles: ["dart"],
+      allFiles: ["*"],
     },
   };
 
