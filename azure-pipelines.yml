@@ -22,7 +22,7 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSource: "spec"
-      versionSpec: "10.x"
+      versionSpec: "18.x"
       checkLatest: true
     displayName: "Install Node.js"
   # for convenience, we tag CI-produced packages with a version number
