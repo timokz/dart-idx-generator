@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import { log } from "console";
 import * as vscode from "vscode";
-import deleteAllIndexFiles from "./feature/deleteIndexFiles";
+import { deleteAllIndexFiles } from "./feature/deleteIndexFiles";
 import {
   generateIndexFile,
   generateIndexFilesForAllFolders,

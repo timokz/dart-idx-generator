@@ -7,7 +7,7 @@ import { getDirectories } from "../utils/util";
 
  * Mainly used for testing purposes, but will work in production.
 */
-export default async function deleteAllIndexFiles(): Promise<void> {
+export async function deleteAllIndexFiles() {
   // check if a workspace is open
   if (
     !vscode.workspace.workspaceFolders ||
