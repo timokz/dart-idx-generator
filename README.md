@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/timokz/dart-idx-generator/_apis/build/status%2Ftimokz.dart-idx-generator?branchName=main)](https://dev.azure.com/timokz/dart-idx-generator/_build/latest?definitionId=1&branchName=main)
+
 # dart-idx-generator
 
 This extension supports the generation of individual and project-wide .index files for dart and Flutter projects,
