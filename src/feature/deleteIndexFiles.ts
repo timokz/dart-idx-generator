@@ -1,18 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
-import {
-  doesDirectoryContainIndexFile,
-  getDirectories,
-  getRelevantDirectories,
-} from "../utils/util";
 
-/** Called when the user executes the command "dart-idx-generator.deleteIndexFiles" from the command palette. 
-
+/**
+ * Called when the user executes the command "dart-idx-generator.deleteIndexFiles" from the command palette.
  * Mainly used for testing purposes, but will work in production.
-*/
-export async function deleteAllIndexFiles() {
-  // check if a workspace is open
+ */
+export async function deleteAllIndexFiles(): Promise<void> {
   if (
     !vscode.workspace.workspaceFolders ||
     vscode.workspace.workspaceFolders.length === 0
@@ -20,6 +14,7 @@ export async function deleteAllIndexFiles() {
     vscode.window.showErrorMessage("No workspace containing folders is open");
     return;
   }
+  const workspace = vscode.workspace.workspaceFolders[0].uri;
 
   // ask for confirmation
   //   const confirmation = await vscode.window.showWarningMessage('Are you sure you want to delete all index files?', 'Yes', 'No');
@@ -27,38 +22,31 @@ export async function deleteAllIndexFiles() {
   if (confirmation !== "Yes") {
     return;
   }
-
-  const workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
-
-  const directories = await getRelevantDirectories(workspace);
-
-  console.log("DELETEALLINDEXFILES directories:", directories);
-
-  const filteredDirectories = directories.filter((directory) =>
-    doesDirectoryContainIndexFile(directory)
-  );
-  console.log("DELETEALLINDEXFILES filteredDirectories:", filteredDirectories);
-
-  for (const directory of filteredDirectories) {
-    const directoryPath = path.join(workspace, directory);
-    await deleteIndexFile(directoryPath);
+  if (!fs.existsSync(workspace.fsPath)) {
+    console.error(`Directory not found: ${workspace.fsPath}`);
+    return;
   }
 
-  vscode.window.showInformationMessage("All index files deleted");
+  deleteIndexFilesRecursively(workspace.fsPath);
 }
 
-async function deleteIndexFile(directory: string): Promise<void> {
-  const indexFilePath = path.join(directory, "index.dart"); // TODO configurable
-  if (fs.existsSync(indexFilePath)) {
-    fs.unlinkSync(indexFilePath);
+/**
+ * Recursively deletes "index.dart" files from the specified directory and its subdirectories.
+ * @param directoryPath The path to the directory to start deletion from.
+ */
+function deleteIndexFilesRecursively(directoryPath: string): void {
+  const indexPath = path.join(directoryPath, "index.dart");
+  if (fs.existsSync(indexPath)) {
+    fs.unlinkSync(indexPath);
+    console.log(`Deleted: ${indexPath}`);
   }
 
-  const subdirectories = await getDirectories(directory);
-
-  console.log("DELETEINDEXFILE subdirectories:", subdirectories);
-
+  // Check subdirectories recursively
+  const subdirectories = fs.readdirSync(directoryPath, { withFileTypes: true });
   for (const subdirectory of subdirectories) {
-    const subdirectoryPath = path.join(directory, subdirectory);
-    await deleteIndexFile(subdirectoryPath);
+    if (subdirectory.isDirectory()) {
+      const subdirectoryPath = path.join(directoryPath, subdirectory.name);
+      deleteIndexFilesRecursively(subdirectoryPath);
+    }
   }
 }
