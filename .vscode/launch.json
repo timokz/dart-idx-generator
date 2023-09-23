@@ -27,25 +27,7 @@
 			  "--extensionDevelopmentPath=${workspaceFolder}",
 			  "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
 			],
-			"outFiles": ["${workspaceFolder}/out/test/**/*.js"]
+			"outFiles": ["${workspaceFolder}/out/test/**/*.js"],
 		  },
-		{
-			"args": [
-				"-u",
-				"tdd",
-				"--timeout",
-				"999999",
-				"--colors",
-				"${workspaceFolder}/test/**/*.test.ts"
-			],
-			"internalConsoleOptions": "openOnSessionStart",
-			"name": "Mocha Tests",
-			"program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-			"request": "launch",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"type": "node"
-		}
 	]
 }
