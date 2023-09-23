@@ -1,8 +1,9 @@
-# dart-idx-generator README
+# dart-idx-generator
 
-This extension supports the deletion and generation of individual and project-wide .index files for dart and Flutter projects,
+This extension supports the generation of individual and project-wide .index files for dart and Flutter projects,
 reducing long and unnecessary important statements, as well as relative imports.
-## Features 
+
+## Features
 
 - Generating an index file, exporting your current directories files.
 - Generating index files for your whole project.
@@ -14,14 +15,21 @@ reducing long and unnecessary important statements, as well as relative imports.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Customization is availabe through the following settings:
 
-For example:
 
-This extension contributes the following settings:
+- **Exclude Folders**
+  - Folders that should be excluded from the index file generation.
+- **Include Subfolders**
+  - Include subfolders in the index file generation.
+- **File Name**
+    - Name your barrel files `"index.dart"` or like the directory they're in`"${package_name}.dart"`
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+
+
+- **Scope**
+  - Specify the scope for index file generation (e.g., lib/).
+
 
 ## Known Issues
 
@@ -35,15 +43,6 @@ Users appreciate release notes as you update your extension.
 
 Initial release of ...
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
 
 ## Following extension guidelines
 
@@ -51,17 +50,3 @@ Ensure that you've read through the extensions guidelines and follow the best pr
 
 * [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
 
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
