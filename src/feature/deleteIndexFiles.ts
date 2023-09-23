@@ -1,7 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
-import { getDirectories } from "../utils/util";
+import {
+  doesDirectoryContainIndexFile,
+  getDirectories,
+  getRelevantDirectories,
+} from "../utils/util";
 
 /** Called when the user executes the command "dart-idx-generator.deleteIndexFiles" from the command palette. 
 
@@ -24,16 +28,14 @@ export async function deleteAllIndexFiles() {
     return;
   }
 
-  // path to the workspace
   const workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
-  const directories = await getDirectories(workspace);
+  const directories = await getRelevantDirectories(workspace);
 
   console.log("DELETEALLINDEXFILES directories:", directories);
 
-  //skip all directories that aren't named lib or src for now TODO
-  const filteredDirectories = directories.filter(
-    (directory) => directory === "lib" || directory === "src"
+  const filteredDirectories = directories.filter((directory) =>
+    doesDirectoryContainIndexFile(directory)
   );
   console.log("DELETEALLINDEXFILES filteredDirectories:", filteredDirectories);
 
@@ -46,12 +48,14 @@ export async function deleteAllIndexFiles() {
 }
 
 async function deleteIndexFile(directory: string): Promise<void> {
-  const indexFilePath = path.join(directory, "index.dart");
+  const indexFilePath = path.join(directory, "index.dart"); // TODO configurable
   if (fs.existsSync(indexFilePath)) {
     fs.unlinkSync(indexFilePath);
   }
 
   const subdirectories = await getDirectories(directory);
+
+  console.log("DELETEINDEXFILE subdirectories:", subdirectories);
 
   for (const subdirectory of subdirectories) {
     const subdirectoryPath = path.join(directory, subdirectory);

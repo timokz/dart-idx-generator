@@ -18,6 +18,23 @@ export async function getDirectories(workspace: string): Promise<string[]> {
   }
 }
 
+export async function getRelevantDirectories(
+  workspace: string
+): Promise<string[]> {
+  try {
+    const directories = await getDirectories(workspace);
+
+    // #TODO extend criteria
+    const relevantDirectories = directories.filter((directory) => {
+      return !directory.startsWith(".") && !directory.includes("build");
+    });
+
+    return relevantDirectories;
+  } catch (error) {
+    throw error;
+  }
+}
+
 /** Get all files in the given directory with the given extension */
 export async function getFiles(
   directory: string,
@@ -166,4 +183,29 @@ export function writeIndexFile(
 
   const indexFileContent = `${exports}\n`;
   fs.writeFileSync(path.join(directory, fileName), indexFileContent);
+}
+
+/**
+ * Checks if the given directory or its subdirectories contain a file named "index.dart".
+ * Does not check for the directories existence!
+ * @param directoryPath The path to the directory to check.
+ * @returns True if "index.dart" exists in the directory or its subdirectories, false otherwise.
+ */
+export function doesDirectoryContainIndexFile(directoryPath: string): boolean {
+  const indexPath = path.join(directoryPath, "index.dart");
+  if (fs.existsSync(indexPath)) {
+    return true;
+  }
+  // Check subdirectories recursively
+  const subdirectories = fs.readdirSync(directoryPath, { withFileTypes: true });
+  for (const subdirectory of subdirectories) {
+    if (subdirectory.isDirectory()) {
+      const subdirectoryPath = path.join(directoryPath, subdirectory.name);
+      if (doesDirectoryContainIndexFile(subdirectoryPath)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
