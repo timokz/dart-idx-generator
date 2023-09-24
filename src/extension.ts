@@ -50,14 +50,17 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  vscode.workspace.onDidSaveNotebookDocument(() => {
-    //TODO: generate index file on save
-    vscode.window.showInformationMessage("Notebook saved");
-    generateIndexFile();
+  vscode.workspace.onDidSaveTextDocument((document) => {
+    if (document.languageId === "dart") {
+      vscode.window.showInformationMessage(
+        `Generated Index for ${document.fileName}`
+      );
+      generateIndexFile();
+    }
   });
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {
-  log("deactivated");
+  log("deactivated extension");
 }
