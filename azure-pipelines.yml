@@ -1,5 +1,3 @@
-#  Courtesy of https://github.com/rkotze
-
 trigger:
   - "*"
 pr:
