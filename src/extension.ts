@@ -7,6 +7,7 @@ import {
   generateIndexFile,
   generateIndexFilesForAllFolders,
 } from "./feature/generateIndexFile";
+import { showGraph } from "./feature/graph/depGraph";
 import { selectEntryPoint } from "./utils/util";
 
 // This method is called when your extension is activated
@@ -38,6 +39,10 @@ export async function activate(context: vscode.ExtensionContext) {
       "dartIndexGenerator.selectEntryPoint",
       selectEntryPoint
     )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("dartIndexGenerator.showGraph", showGraph)
   );
 
   vscode.workspace.onDidChangeConfiguration(async (event) => {
