@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
 import { checkNameConfigDefault } from "../feature/configRepo";
-import { excludedDirectoriesRegex } from "./constants";
+import { excludedDirectoriesRegex, excludedFilesRegex } from "./constants";
 import { exportStatements, specialDirectories } from "./exportstatement";
 
 /** Get all directories in the given workspace */
@@ -35,14 +35,18 @@ export async function getRelevantDirectories(
   }
 }
 
-/** Get all files in the given directory with the given extension */
+/** Get all files in the given directory with the given extension,
+ * ignoring generated files
+ */
 export async function getFiles(
   directory: string,
   extension: string
 ): Promise<string[]> | never {
   try {
     const files = await fs.promises.readdir(directory);
-    const filteredFiles = files.filter((file) => file.endsWith(extension));
+    const filteredFiles = files.filter(
+      (file) => file.endsWith(extension) && excludedFilesRegex.match(file)
+    );
     return filteredFiles;
   } catch (error) {
     throw error;
