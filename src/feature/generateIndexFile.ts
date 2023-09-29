@@ -27,6 +27,7 @@ export async function generateIndexFile() {
   }
 
   const current = await findRoot(currentFolder, ".dart");
+
   const dartFiles = await getFiles(current, ".dart");
 
   if (dartFiles.length === 0) {

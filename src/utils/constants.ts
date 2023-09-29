@@ -36,3 +36,6 @@ export const excludedDirectories = [
 
 // regex to exclude all directories from excludedDirectories
 export const excludedDirectoriesRegex = excludedDirectories.join("|");
+
+// ignore all files that are generated, or shouldn't be exported
+export const excludedFilesRegex = "/^(?!.*.g.dart$).*.dart$/";
