@@ -45,7 +45,7 @@ export async function getFiles(
   try {
     const files = await fs.promises.readdir(directory);
     const filteredFiles = files.filter(
-      (file) => file.endsWith(extension) && excludedFilesRegex.match(file)
+      (file) => file.endsWith(extension) && excludedFilesRegex.test(file)
     );
     return filteredFiles;
   } catch (error) {
