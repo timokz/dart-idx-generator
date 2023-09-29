@@ -10,12 +10,10 @@ const tempPath = path.join(process.cwd(), tempDir);
 
 suite("findRoot Tests", () => {
   suiteSetup(() => {
-    // equivalent to before in Mocha
     fs.mkdirSync(tempPath);
   });
 
   suiteTeardown(() => {
-    // equivalent to after in Mocha
     fs.rmdirSync(tempPath, { recursive: true });
   });
 
