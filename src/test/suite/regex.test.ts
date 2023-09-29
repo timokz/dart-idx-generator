@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { excludedFilesRegex } from "../utils/constants";
+import { excludedFilesRegex } from "../../utils/constants";
 
 const files = [
   "fileName.g.dart",

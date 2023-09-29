@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 import {
   generateIndexFile,
   generateIndexFilesForAllFolders,
-} from "../feature/generateIndexFile";
+} from "../../feature/generateIndexFile";
 
 const testFolderUri = vscode.Uri.file(path.join(__dirname, "../test"));
 
