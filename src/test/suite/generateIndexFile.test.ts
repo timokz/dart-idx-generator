@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import * as assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
@@ -9,16 +9,16 @@ import {
 
 const testFolderUri = vscode.Uri.file(path.join(__dirname, "../test"));
 
-describe("generateIndexFile", () => {
-  it("should generate index.dart file in the given directory", async () => {
+suite("generateIndexFile Tests", () => {
+  test("should generate index.dart file in the given directory", async () => {
     await generateIndexFile();
     const indexFilePath = path.join(testFolderUri.fsPath, "index.dart");
-    expect(fs.existsSync(indexFilePath)).equal(true);
+    assert.strictEqual(fs.existsSync(indexFilePath), true);
   });
 });
 
-describe("generateIndexFilesForAllFolders", () => {
-  it("should generate index.dart file in all subdirectories of the given directory", async () => {
+suite("generateIndexFilesForAllFolders Tests", () => {
+  test("should generate index.dart file in all subdirectories of the given directory", async () => {
     await generateIndexFilesForAllFolders();
     const dirs = fs
       .readdirSync(testFolderUri.fsPath, { withFileTypes: true })
@@ -26,7 +26,7 @@ describe("generateIndexFilesForAllFolders", () => {
       .map((dirent) => dirent.name);
     for (const dir of dirs) {
       const indexFilePath = path.join(testFolderUri.fsPath, dir, "index.dart");
-      expect(fs.existsSync(indexFilePath)).equal(true);
+      assert.strictEqual(fs.existsSync(indexFilePath), true);
     }
   });
 });
