@@ -35,7 +35,8 @@ Customization is availabe through the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+A Buffer Deprecation [Warning](https://github.com/andrewrk/node-fd-slicer/issues/3) can unfortunately not be resolved,
+as vscode depends on a module, which itself depends on an unmaintained package, see link provided.
 
 ## Release Notes
 
