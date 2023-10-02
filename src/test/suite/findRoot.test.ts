@@ -14,7 +14,7 @@ suite("findRoot Tests", () => {
   });
 
   suiteTeardown(() => {
-    fs.rmdirSync(tempPath, { recursive: true });
+    fs.rmSync(tempPath, { recursive: true });
   });
 
   test("should return the special directory when it exists", async () => {
