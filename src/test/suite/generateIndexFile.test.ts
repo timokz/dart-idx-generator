@@ -1,5 +1,6 @@
 import * as assert from "assert";
 import * as fs from "fs";
+import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import {
@@ -7,7 +8,10 @@ import {
   generateIndexFilesForAllFolders,
 } from "../../feature/generateIndexFile";
 
-const testFolderUri = vscode.Uri.file(path.join(__dirname, "../test"));
+const tempPath = os.tmpdir();
+
+const testFolderUri = vscode.Uri.file(path.join(tempPath, "/test"));
+fs.mkdirSync(testFolderUri.fsPath, { recursive: true });
 
 suite("generateIndexFile Tests", () => {
   test("should generate index.dart file in the given directory", async () => {
