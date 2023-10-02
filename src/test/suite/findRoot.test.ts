@@ -4,8 +4,8 @@ import * as path from "path";
 import { findRoot } from "../../utils/util";
 
 const tempDir = "__temp__";
-const fileExtension = ".ts";
-const specialDirectory = "src";
+const fileExtension = ".dart";
+const specialDirectory = "lib";
 const tempPath = path.join(process.cwd(), tempDir);
 
 suite("findRoot Tests", () => {
@@ -21,6 +21,8 @@ suite("findRoot Tests", () => {
     fs.mkdirSync(path.join(tempPath, specialDirectory));
 
     const root = await findRoot(tempPath, fileExtension);
+
+    console.log("ROOT", root);
     assert.strictEqual(root, path.join(tempPath, specialDirectory));
   });
 

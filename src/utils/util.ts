@@ -60,14 +60,14 @@ export async function findRoot(
   workspace: string,
   fileExtension: string
 ): Promise<string> {
-  console.log("FINDROOT", workspace, fileExtension);
+  // console.log("FINDROOT", workspace, fileExtension);
   let specialDirectory = path.join(
     workspace,
     specialDirectories[fileExtension]
   );
 
   while (!isRoot(workspace)) {
-    console.log("FINDROOT", workspace, fileExtension, "up");
+    //  console.log("FINDROOT", workspace, fileExtension, "up");
     const files = await vscode.workspace.findFiles(
       `**/*${fileExtension}`,
       excludedDirectoriesRegex,
