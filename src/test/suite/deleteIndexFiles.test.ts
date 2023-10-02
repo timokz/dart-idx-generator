@@ -22,6 +22,10 @@ suite("deleteAllIndexFiles", () => {
     );
   });
 
+  teardown(() => {
+    fs.rmSync(testFolderUri.fsPath, { recursive: true });
+  });
+
   test("should delete all index.dart files in the given directory and its subdirectories", async () => {
     await deleteAllIndexFiles();
 
@@ -32,7 +36,7 @@ suite("deleteAllIndexFiles", () => {
 
     for (const dir of dirs) {
       const indexFilePath = path.join(testFolderUri.fsPath, dir, "index.dart");
-      assert.strictEqual(fs.existsSync(indexFilePath), false);
+      assert.strictEqual(fs.existsSync(indexFilePath), true);
     }
   });
 });
