@@ -9,11 +9,17 @@ import {
 } from "../../feature/generateIndexFile";
 
 const tempPath = os.tmpdir();
-const testFolderUri = vscode.Uri.file(path.join(tempPath, "/test"));
-
-fs.mkdirSync(testFolderUri.fsPath, { recursive: true });
+const testFolderUri = vscode.Uri.file(path.join(tempPath, "/vsc_ext_test"));
 
 suite("generateIndexFile Tests", () => {
+  setup(() => {
+    fs.mkdirSync(testFolderUri.fsPath, { recursive: true });
+  });
+
+  teardown(() => {
+    fs.rmSync(testFolderUri.fsPath, { recursive: true });
+  });
+
   test("should generate index.dart file in the given directory", async () => {
     await generateIndexFile();
     const indexFilePath = path.join(testFolderUri.fsPath, "index.dart");
@@ -28,6 +34,7 @@ suite("generateIndexFilesForAllFolders Tests", () => {
       .readdirSync(testFolderUri.fsPath, { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
       .map((dirent) => dirent.name);
+
     for (const dir of dirs) {
       const indexFilePath = path.join(testFolderUri.fsPath, dir, "index.dart");
       assert.strictEqual(fs.existsSync(indexFilePath), true);

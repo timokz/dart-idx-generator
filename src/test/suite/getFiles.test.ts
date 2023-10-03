@@ -5,7 +5,7 @@ import * as path from "path";
 import { getFiles } from "../../utils/util";
 
 const tempPath = os.tmpdir();
-const testFolderPath = path.join(tempPath, "testFolder");
+const testFolderPath = path.join(tempPath, "/vsc_ext_test");
 
 suite("getFiles Tests", () => {
   setup(() => {

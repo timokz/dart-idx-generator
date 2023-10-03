@@ -3,9 +3,6 @@ import * as assert from "assert";
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from "vscode";
-import path = require("path");
-import fs = require("fs");
-import os = require("os");
 
 suite("Extension Test Suite", () => {
   vscode.window.showInformationMessage("Start all tests.");

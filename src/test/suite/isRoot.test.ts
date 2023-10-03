@@ -25,8 +25,6 @@ suite("isRoot", () => {
   });
 
   test("should return false for undefined", () => {
-    const undefinedValue = undefined;
-
     assert.strictEqual(isRoot(""), false);
   });
 });
