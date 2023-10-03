@@ -9,8 +9,8 @@ import {
 } from "../../feature/generateIndexFile";
 
 const tempPath = os.tmpdir();
-
 const testFolderUri = vscode.Uri.file(path.join(tempPath, "/test"));
+
 fs.mkdirSync(testFolderUri.fsPath, { recursive: true });
 
 suite("generateIndexFile Tests", () => {

@@ -42,15 +42,16 @@ export async function getFiles(
   directory: string,
   extension: string
 ): Promise<string[]> | never {
-  try {
-    const files = await fs.promises.readdir(directory);
-    const filteredFiles = files.filter(
-      (file) => file.endsWith(extension) && excludedFilesRegex.test(file)
-    );
-    return filteredFiles;
-  } catch (error) {
-    throw error;
+  if (!fs.existsSync(directory)) {
+    console.error(`Directory not found: ${directory}`);
+    return [];
   }
+
+  const files = await fs.promises.readdir(directory);
+  const filteredFiles = files.filter(
+    (file) => file.endsWith(extension) && excludedFilesRegex.test(file)
+  );
+  return filteredFiles;
 }
 
 /** Get the path to the first file with the given extension in the given workspace,

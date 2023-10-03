@@ -6,7 +6,6 @@ import * as vscode from "vscode";
 import { deleteAllIndexFiles } from "../../feature/deleteIndexFiles";
 
 const tempPath = os.tmpdir();
-
 const testFolderUri = vscode.Uri.file(path.join(tempPath, "../test"));
 
 suite("deleteAllIndexFiles", () => {
