@@ -19,7 +19,7 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSource: "spec"
-      versionSpec: "10.x"
+      versionSpec: "14x"
       checkLatest: true
     displayName: "Install Node.js"
 
