@@ -24,19 +24,18 @@ steps:
       versionSpec: "10.x"
     displayName: "Install Node.js"
 
-  - bash: |
-      /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-      echo ">>> Started xvfb"
-    displayName: Start xvfb
-    condition: and(succeeded(), eq(variables['Agent.OS'], 'Linux'))
+  - script: |
+      const { execSync } = require('child_process');
 
-  - bash: |
-      echo ">>> Compile vscode-test"
-      yarn && yarn compile
-      echo ">>> Compiled vscode-test"
-      cd sample
-      echo ">>> Run sample integration test"
-      yarn && yarn compile && yarn test
+      if (process.platform === 'linux') {
+        execSync('/usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &');
+        console.log('>>> Started xvfb');
+      }
+
+      console.log('>>> Compile vscode-test');
+      execSync('npm install && npm run compile');
+
+      execSync('cd sample && npm install && npm run compile && npm run test');
     displayName: Run Tests
     env:
       DISPLAY: ":99.0"
