@@ -21,7 +21,9 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: "10.x"
+      versionSource: "spec"
+      versionSpec: "14.x"
+      checkLatest: true
     displayName: "Install Node.js"
 
   - bash: |
@@ -40,3 +42,4 @@ steps:
     displayName: Run Tests
     env:
       DISPLAY: ":99.0"
+      npm_config_loglevel: "verbose"
