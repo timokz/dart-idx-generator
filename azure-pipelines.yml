@@ -19,7 +19,7 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSource: "spec"
-      versionSpec: "10.x"
+      versionSpec: "14.x"
       checkLatest: true
     displayName: "Install Node.js"
 
@@ -33,3 +33,17 @@ steps:
     env:
       DISPLAY: ":99.0"
       npm_config_loglevel: "verbose"
+
+  - task: Npm@1
+    inputs:
+      command: 'install'
+      
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: 'run lint'
+  
+  - task: Npm@1
+    inputs:
+        command: custom
+        customCommand: 'run pack'
