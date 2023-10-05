@@ -9,7 +9,7 @@ import {
   getDirectories,
   getFiles,
 } from "../utils/util";
-import { checkNameConfigDefault } from "./configRepo";
+import { checkEntryPointConfig, checkNameConfigDefault } from "./configRepo";
 
 /**
  * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
@@ -20,6 +20,8 @@ export async function generateIndexFile() {
   if (!workspaceFolder) {
     return;
   }
+
+  console.log("GEN INDEX FILE", workspaceFolder);
 
   const currentFolder = getCurrentFolder() || workspaceFolder.uri.fsPath;
   if (excludedDirectoriesRegex.match(currentFolder)) {
@@ -49,6 +51,8 @@ export async function generateIndexFilesForAllFolders(): Promise<void> {
     return;
   }
 
+  console.log("GEN MULTIPLE INDEX FILES", workspaceFolder);
+
   try {
     const workspace = workspaceFolder.uri.fsPath;
     await createIndexFiles(workspace, ".dart");
@@ -73,10 +77,15 @@ async function createIndexFiles(
   workspace: string,
   fileExtension: string
 ): Promise<void> {
-  const directories = await getDirectories(path.join(workspace, "lib"));
+  const entryPoint = checkEntryPointConfig();
+
+  console.log("ENTRY POINT", entryPoint);
+  console.log("WORKSPACE", workspace);
+  const directories = await getDirectories(path.join(workspace, entryPoint));
 
   for (const directory of directories) {
     const directoryPath = path.join(workspace, directory);
+    console.log("DIRECTORY PATH", directoryPath);
     await createIndexFile(directoryPath, fileExtension);
   }
 }
@@ -90,8 +99,11 @@ async function createIndexFile(
   directory: string,
   fileExtension: string
 ): Promise<void> {
+  console.log("CREATE INDEX FILE", directory);
   const files = await getFiles(directory, fileExtension);
   const subdirectories = await getDirectories(directory);
+
+  console.log("FILES", files);
 
   if (files.length > 0 || subdirectories.length > 0) {
     let exports = "";
@@ -100,6 +112,7 @@ async function createIndexFile(
       exports = exportCurrentDirectoryFiles(exports, file, fileExtension);
     }
 
+    // Todo: configurable option to exclude subdirectories
     await createIndexFilesForSubdirectories(
       subdirectories,
       directory,
