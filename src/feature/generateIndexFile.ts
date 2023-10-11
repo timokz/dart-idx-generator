@@ -9,11 +9,7 @@ import {
   getDirectories,
   getFiles,
 } from "../utils/util";
-import {
-  checkEntryPointConfig,
-  checkNameConfigDefault,
-  getEntryPoint,
-} from "./configRepo";
+import { checkEntryPointConfig, checkNameConfigDefault } from "./configRepo";
 
 /**
  * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
@@ -81,13 +77,7 @@ async function createIndexFiles(
   workspace: string,
   fileExtension: string
 ): Promise<void> {
-  const entryPoint = getEntryPoint();
-
-  console.log("ENTRYPOINT", entryPoint);
-  const directories = await getDirectories(path.join(workspace, entryPoint));
   const entryPoint = checkEntryPointConfig();
-
-  console.log("ENTRY POINT", entryPoint);
   console.log("WORKSPACE", workspace);
   const directories = await getDirectories(path.join(workspace, entryPoint));
 
