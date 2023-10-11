@@ -9,7 +9,11 @@ import {
   getDirectories,
   getFiles,
 } from "../utils/util";
-import { checkNameConfigDefault, getEntryPoint } from "./configRepo";
+import {
+  checkEntryPointConfig,
+  checkNameConfigDefault,
+  getEntryPoint,
+} from "./configRepo";
 
 /**
  * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
@@ -22,6 +26,8 @@ export async function generateIndexFile() {
   if (!workspaceFolder) {
     return;
   }
+
+  console.log("GEN INDEX FILE", workspaceFolder);
 
   const currentFolder = getCurrentFolder() || workspaceFolder.uri.fsPath;
   if (excludedDirectoriesRegex.match(currentFolder)) {
@@ -52,6 +58,8 @@ export async function generateIndexFilesForAllFolders() {
     return;
   }
 
+  console.log("GEN MULTIPLE INDEX FILES", workspaceFolder);
+
   const workspace = workspaceFolder.uri.fsPath;
   console.log("generateIndexFilesForAllFolders workspace", workspace);
   await createIndexFiles(workspace, ".dart");
@@ -77,9 +85,15 @@ async function createIndexFiles(
 
   console.log("ENTRYPOINT", entryPoint);
   const directories = await getDirectories(path.join(workspace, entryPoint));
+  const entryPoint = checkEntryPointConfig();
+
+  console.log("ENTRY POINT", entryPoint);
+  console.log("WORKSPACE", workspace);
+  const directories = await getDirectories(path.join(workspace, entryPoint));
 
   for (const directory of directories) {
     const directoryPath = path.join(workspace, directory);
+    console.log("DIRECTORY PATH", directoryPath);
     await createIndexFile(directoryPath, fileExtension);
   }
 }
@@ -93,8 +107,11 @@ async function createIndexFile(
   directory: string,
   fileExtension: string
 ): Promise<void> {
+  console.log("CREATE INDEX FILE", directory);
   const files = await getFiles(directory, fileExtension);
   const subdirectories = await getDirectories(directory);
+
+  console.log("FILES", files);
 
   if (files.length > 0 || subdirectories.length > 0) {
     let exports = "";
@@ -103,6 +120,7 @@ async function createIndexFile(
       exports = exportCurrentDirectoryFiles(exports, file, fileExtension);
     }
 
+    // Todo: configurable option to exclude subdirectories
     await createIndexFilesForSubdirectories(
       subdirectories,
       directory,

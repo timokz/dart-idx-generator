@@ -1,7 +1,10 @@
 trigger:
-  - "*"
-pr:
-  - "*"
+  branches:
+    include:
+      - main
+  tags:
+    include:
+      - v*
 
 strategy:
   matrix:
@@ -18,16 +21,16 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSource: "spec"
       versionSpec: "10.x"
-      checkLatest: true
     displayName: "Install Node.js"
 
   - script: |
-      npm install -g webpack webpack-cli --save-dev
+
       npm install
-      npx webpack --config webpack.config.js
-    displayName: "npm install, run webpack"
+      npm run compile
+
+      npm run test
+
+    displayName: Run Tests
     env:
       DISPLAY: ":99.0"
-      npm_config_loglevel: "verbose"
