@@ -9,13 +9,15 @@ import {
   getDirectories,
   getFiles,
 } from "../utils/util";
-import { checkNameConfigDefault } from "./configRepo";
+import { checkNameConfigDefault, getEntryPoint } from "./configRepo";
 
 /**
  * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
  * Generates an index.dart file in the current folder containing all dart files in the current folder
  */
 export async function generateIndexFile() {
+  console.log("Before generateIndexFile log statement", vscode.workspace);
+
   const workspaceFolder = getFirstWorkspaceFolder();
   if (!workspaceFolder) {
     return;
@@ -43,18 +45,16 @@ export async function generateIndexFile() {
  * Generates an index file for every folder in the workspace containing dart files,
  * from the respective folder and all subfolders
  */
-export async function generateIndexFilesForAllFolders(): Promise<void> {
+export async function generateIndexFilesForAllFolders() {
+  console.log("generateIndexFilesForAllFolders");
   const workspaceFolder = getFirstWorkspaceFolder();
   if (!workspaceFolder) {
     return;
   }
 
-  try {
-    const workspace = workspaceFolder.uri.fsPath;
-    await createIndexFiles(workspace, ".dart");
-  } catch (error) {
-    vscode.window.showErrorMessage(error as string);
-  }
+  const workspace = workspaceFolder.uri.fsPath;
+  console.log("generateIndexFilesForAllFolders workspace", workspace);
+  await createIndexFiles(workspace, ".dart");
 }
 
 function getFirstWorkspaceFolder(): vscode.WorkspaceFolder | null {
@@ -73,7 +73,10 @@ async function createIndexFiles(
   workspace: string,
   fileExtension: string
 ): Promise<void> {
-  const directories = await getDirectories(path.join(workspace, "lib"));
+  const entryPoint = getEntryPoint();
+
+  console.log("ENTRYPOINT", entryPoint);
+  const directories = await getDirectories(path.join(workspace, entryPoint));
 
   for (const directory of directories) {
     const directoryPath = path.join(workspace, directory);

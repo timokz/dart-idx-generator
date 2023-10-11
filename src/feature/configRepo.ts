@@ -7,3 +7,11 @@ export function checkNameConfigDefault(): boolean {
 
   return fileName === "index.dart";
 }
+
+export function getEntryPoint(): string {
+  const config = vscode.workspace.getConfiguration("dart-idx-generator");
+
+  const entryPoint = config.get("scope", "lib/");
+
+  return entryPoint;
+}
