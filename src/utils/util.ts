@@ -44,19 +44,6 @@ export async function getFiles(
   directory: string,
   extension: string
 ): Promise<string[]> | never {
-  console.log("GETFILES", directory);
-  console.log("GETFILES", fs.existsSync(directory));
-
-  //print current working directory
-  console.log("CWD", process.cwd());
-
-  try {
-    fs.accessSync(directory, fs.constants.R_OK | fs.constants.W_OK);
-  } catch (error) {
-    console.error(`Directory not allowed: ${directory}`);
-    throw error;
-  }
-
   if (!fs.existsSync(directory)) {
     console.error(`Directory not found: ${directory}`);
     return [];

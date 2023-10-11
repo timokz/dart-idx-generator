@@ -33,6 +33,7 @@ suite("getFiles Tests", () => {
 
   test("should handle non-existent directory", async () => {
     const nonExistentFolder = path.join(testFolderPath, "nonexistent");
+
     const dartFiles = await getFiles(nonExistentFolder, ".dart");
     assert.strictEqual(dartFiles.length, 0);
   });
