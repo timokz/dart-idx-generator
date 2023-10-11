@@ -50,10 +50,12 @@ export async function getFiles(
   //print current working directory
   console.log("CWD", process.cwd());
 
-  console.log(
-    "EXIST?",
-    fs.promises.access(directory, fs.constants.F_OK).then()
-  );
+  try {
+    fs.accessSync(directory, fs.constants.R_OK | fs.constants.W_OK);
+  } catch (error) {
+    console.error(`Directory not allowed: ${directory}`);
+    throw error;
+  }
 
   if (!fs.existsSync(directory)) {
     console.error(`Directory not found: ${directory}`);

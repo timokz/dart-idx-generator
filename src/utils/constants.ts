@@ -6,6 +6,7 @@ enum FileTypes {
 // all general folders that can be excluded from being searched for files
 export const excludedDirectories = [
   "**/node_modules/**",
+  "**/.fvm/**",
   "**/.git/**",
   "**/.vscode/**",
   "**/.dart_tool/**",
@@ -23,6 +24,9 @@ export const excludedDirectories = [
   "**/examples/**",
   "**/generated/**",
   "**/gen/**",
+  "/linux/**",
+  "/windows/**",
+  "/macos/**",
   "**/out/**",
   "**/packages/**",
   "**/test/**",
