@@ -3,7 +3,7 @@
 # dart-idx-generator
 
 This extension supports the generation of individual and project-wide .index files for dart and Flutter projects,
-reducing long and unnecessary important statements, as well as relative imports.
+reducing long and unnecessary import statements, as well as relative imports.
 
 ## Features
 
