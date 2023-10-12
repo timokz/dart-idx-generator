@@ -3,12 +3,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { excludedDirectoriesRegex } from "../utils/constants";
 import { exportStatements } from "../utils/exportstatement";
-import {
-  findRoot,
-  getCurrentFolder,
-  getDirectories,
-  getFiles,
-} from "../utils/util";
+import { getCurrentFolder, getDirectories, getFiles } from "../utils/util";
 import { checkEntryPointConfig, checkNameConfigDefault } from "./configRepo";
 
 /**
@@ -30,16 +25,14 @@ export async function generateIndexFile() {
     return;
   }
 
-  const current = await findRoot(currentFolder, ".dart");
-
-  const dartFiles = await getFiles(current, ".dart");
+  const dartFiles = await getFiles(currentFolder, ".dart");
 
   if (dartFiles.length === 0) {
     vscode.window.showWarningMessage("No .dart files found in this workspace.");
     return;
   }
 
-  await createIndexFile(current, ".dart");
+  await createIndexFile(currentFolder, ".dart");
 }
 
 /**
