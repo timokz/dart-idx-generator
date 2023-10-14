@@ -2,8 +2,8 @@
 
 # dart-idx-generator
 
-This extension supports the generation of individual and project-wide .index files for dart and Flutter projects,
-reducing long and unnecessary import statements, as well as relative imports.
+This extension automates the creation of Dart index files (also called barrel-files), organizing exports from files and subdirectories into an indexed format, reducing long and unnecessary import statements, as well as relative imports.
+
 
 ## Features
 
