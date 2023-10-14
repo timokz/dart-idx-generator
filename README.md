@@ -12,11 +12,6 @@ This extension automates the creation of Dart index files (also called barrel-fi
 - Customization to fit preferences and suggested approaches
 - Deleting all index files in your project
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-
 Upcoming Feature: choose between index files, and export statements at the top of each file.
 
 ## Extension Settings
