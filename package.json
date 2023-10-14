@@ -5,6 +5,7 @@
   "publisher": "timokz",
   "version": "1.0.0",
   "license": "MIT",
+  "icon" : "dart-idx.png",
   "engines": {
     "vscode": "^1.82.0"
   },
