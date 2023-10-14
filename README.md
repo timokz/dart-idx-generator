@@ -42,6 +42,6 @@ as vscode depends on a module, which itself depends on an unmaintained package, 
 
 ### 1.0.0
 
-Initial release of ...
-
+Initial release of basic functionalities.
+Potential abuse of diskspace at your own risk.
 
