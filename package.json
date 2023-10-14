@@ -3,7 +3,7 @@
   "displayName": "dart_idx_generator",
   "description": "Generate index.dart files for your Flutter and Dart Projects.",
   "publisher": "timokz",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
   "engines": {
     "vscode": "^1.82.0"
