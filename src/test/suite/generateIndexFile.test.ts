@@ -1,11 +1,15 @@
+import * as assert from "assert";
+import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
+import { checkNameConfigDefault } from "../../feature/configRepo";
+import { generateIndexFile } from "../../feature/generateIndexFile";
 
 const tempPath = os.tmpdir();
 const testFolderUri = vscode.Uri.file(path.join(tempPath, "vsc_ext_test"));
 
-/* suite("generateIndexFile Tests", () => {
+suite("generateIndexFile Tests", () => {
   setup(() => {
     fs.mkdirSync(testFolderUri.fsPath, { recursive: true });
     fs.writeFileSync(path.join(testFolderUri.fsPath, "yeet.dart"), "");
@@ -23,7 +27,7 @@ const testFolderUri = vscode.Uri.file(path.join(tempPath, "vsc_ext_test"));
     assert.strictEqual(fs.existsSync(indexFilePath), true);
   });
 });
-
+/*
 suite("generateIndexFilesForAllFolders Tests", () => {
   test("should generate index.dart file in all subdirectories of the given directory", async () => {
     await generateIndexFilesForAllFolders();
