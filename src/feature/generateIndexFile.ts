@@ -7,7 +7,8 @@ import { getCurrentFolder, getDirectories, getFiles } from "../utils/util";
 import { checkEntryPointConfig, checkNameConfigDefault } from "./configRepo";
 
 /**
- * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette.
+ * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette,
+ * or on-save if the "dart-idx-generator.generateFileOnSave" setting is set to true.
  * Generates an index.dart file in the current folder containing all dart files in the current folder
  */
 export async function generateIndexFile() {
