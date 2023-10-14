@@ -52,6 +52,12 @@
             "type": "string"
           }
         },
+        "dart_idx_generator.generateFileOnsave"
+        : {
+          "type": "boolean",
+          "description": "Generate index.dart file on save",
+          "default": true
+        },
         "dart-idx-generator.fileName": {
           "type": "string",
           "markdownEnumDescriptions": [

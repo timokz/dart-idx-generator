@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import { log } from "console";
 import * as vscode from "vscode";
+import { checkOnSaveConfig } from "./feature/configRepo";
 import { deleteAllIndexFiles } from "./feature/deleteIndexFiles";
 import {
   generateIndexFile,
@@ -51,7 +52,7 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.workspace.onDidSaveTextDocument((document) => {
-    if (document.languageId === "dart") {
+    if (checkOnSaveConfig() && document.languageId === "dart") {
       vscode.window.showInformationMessage(
         `Generated Index for ${document.fileName}`
       );
