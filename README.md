@@ -3,6 +3,7 @@
 # dart-idx-generator
 
 This extension automates the creation of Dart index files (also called barrel-files), organizing exports from files and subdirectories into an indexed format, reducing long and unnecessary import statements, as well as relative imports.
+![2023-10-15 23-23-42](https://github.com/timokz/dart-idx-generator/assets/68619123/5e836c89-88b3-4292-bcd7-2e5a43e7322f)
 
 
 ## Features
