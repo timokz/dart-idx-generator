@@ -1,6 +1,14 @@
 import exp = require("constants");
 import * as vscode from "vscode";
 
+export function checkExcludeConfig(): string[] {
+  const config = vscode.workspace.getConfiguration("dart-idx-generator");
+
+  const excludes = config.get("excludeFolders", []);
+
+  return excludes;
+}
+
 export function checkNameConfigDefault(): boolean {
   const config = vscode.workspace.getConfiguration("dart-idx-generator");
 
@@ -23,4 +31,12 @@ export function checkOnSaveConfig(): boolean {
   const onSave = config.get("generateOnSave", true);
 
   return onSave;
+}
+
+export function checkSubFolderConfig(): boolean {
+  const config = vscode.workspace.getConfiguration("dart-idx-generator");
+
+  const subFolder = config.get("includeSubfolders", true);
+
+  return subFolder;
 }
