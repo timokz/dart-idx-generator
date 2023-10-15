@@ -45,17 +45,11 @@ export async function activate(context: vscode.ExtensionContext) {
     log("onDidChangeConfiguration");
     if (event.affectsConfiguration("dartIndexGenerator.scope")) {
       selectEntryPoint();
-      vscode.window.showInformationMessage(
-        "dartIndexGenerator configuration changed"
-      );
     }
   });
 
   vscode.workspace.onDidSaveTextDocument((document) => {
     if (checkOnSaveConfig() && document.languageId === "dart") {
-      vscode.window.showInformationMessage(
-        `Generated Index for ${document.fileName}`
-      );
       generateIndexFile();
     }
   });
