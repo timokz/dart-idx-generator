@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
-import { checkNameConfigDefault } from "../feature/configRepo";
 import { excludedDirectoriesRegex, excludedFilesRegex } from "./constants";
 import { exportStatements, specialDirectories } from "./exportstatement";
 
@@ -178,18 +177,6 @@ export function exportSubDirectories(
     }
   }
   return exports;
-}
-export function writeIndexFile(
-  exports: string,
-  directory: string,
-  fileExtension: string
-): void {
-  const fileName = checkNameConfigDefault()
-    ? "index.dart"
-    : path.basename(directory) + fileExtension;
-
-  const indexFileContent = `${exports}\n`;
-  fs.writeFileSync(path.join(directory, fileName), indexFileContent);
 }
 
 /**

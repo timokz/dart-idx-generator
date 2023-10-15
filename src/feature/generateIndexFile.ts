@@ -4,7 +4,12 @@ import * as vscode from "vscode";
 import { excludedDirectoriesRegex } from "../utils/constants";
 import { exportStatements } from "../utils/exportstatement";
 import { getCurrentFolder, getDirectories, getFiles } from "../utils/util";
-import { checkEntryPointConfig, checkNameConfigDefault } from "./configRepo";
+import {
+  checkEntryPointConfig,
+  checkExcludeConfig,
+  checkNameConfigDefault,
+  checkSubFolderConfig,
+} from "./configRepo";
 
 /**
  * Called when the user executes the command "dart-idx-generator.generateFile" from the command palette,
@@ -17,7 +22,10 @@ export async function generateIndexFile() {
     return;
   }
   const currentFolder = getCurrentFolder() || workspaceFolder.uri.fsPath;
-  if (excludedDirectoriesRegex.match(currentFolder)) {
+  if (
+    excludedDirectoriesRegex.match(currentFolder) ||
+    checkExcludeConfig().includes(currentFolder)
+  ) {
     return;
   }
 
@@ -97,12 +105,13 @@ async function createIndexFile(
       exports = exportCurrentDirectoryFiles(exports, file, fileExtension);
     }
 
-    // Todo: configurable option to exclude subdirectories
-    await createIndexFilesForSubdirectories(
-      subdirectories,
-      directory,
-      fileExtension
-    );
+    if (checkSubFolderConfig()) {
+      await createIndexFilesForSubdirectories(
+        subdirectories,
+        directory,
+        fileExtension
+      );
+    }
 
     exports = exportSubDirectories(
       exports,
