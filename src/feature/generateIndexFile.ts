@@ -12,15 +12,10 @@ import { checkEntryPointConfig, checkNameConfigDefault } from "./configRepo";
  * Generates an index.dart file in the current folder containing all dart files in the current folder
  */
 export async function generateIndexFile() {
-  console.log("Before generateIndexFile log statement", vscode.workspace);
-
   const workspaceFolder = getFirstWorkspaceFolder();
   if (!workspaceFolder) {
     return;
   }
-
-  console.log("GEN INDEX FILE", workspaceFolder);
-
   const currentFolder = getCurrentFolder() || workspaceFolder.uri.fsPath;
   if (excludedDirectoriesRegex.match(currentFolder)) {
     return;
@@ -47,8 +42,6 @@ export async function generateIndexFilesForAllFolders() {
   if (!workspaceFolder) {
     return;
   }
-
-  console.log("GEN MULTIPLE INDEX FILES", workspaceFolder);
 
   const workspace = workspaceFolder.uri.fsPath;
   console.log("generateIndexFilesForAllFolders workspace", workspace);
