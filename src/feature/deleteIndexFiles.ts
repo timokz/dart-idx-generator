@@ -11,7 +11,9 @@ export async function deleteAllIndexFiles(): Promise<void> {
     !vscode.workspace.workspaceFolders ||
     vscode.workspace.workspaceFolders.length === 0
   ) {
-    vscode.window.showErrorMessage("No workspace containing folders is open");
+    vscode.window.showErrorMessage(
+      "No workspace containing directories is open"
+    );
     return;
   }
   const workspace = vscode.workspace.workspaceFolders[0].uri;

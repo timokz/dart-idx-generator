@@ -5,7 +5,7 @@ import { runTests } from "@vscode/test-electron";
 async function main() {
   console.log("runTests called");
   try {
-    // The folder containing the Extension Manifest package.json
+    // The directory containing the Extension Manifest package.json
     // Passed to `--extensionDevelopmentPath`
     const extensionDevelopmentPath = path.resolve(__dirname, "../../");
 

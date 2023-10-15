@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 export function checkExcludeConfig(): string[] {
   const config = vscode.workspace.getConfiguration("dart-idx-generator");
 
-  const excludes = config.get("excludeFolders", []);
+  const excludes = config.get("excludeDirectories", []);
 
   return excludes;
 }
@@ -33,10 +33,10 @@ export function checkOnSaveConfig(): boolean {
   return onSave;
 }
 
-export function checkSubFolderConfig(): boolean {
+export function checkSubDirectoriesConfig(): boolean {
   const config = vscode.workspace.getConfiguration("dart-idx-generator");
 
-  const subFolder = config.get("includeSubfolders", true);
+  const subDirectory = config.get("includeSubdirectories", true);
 
-  return subFolder;
+  return subDirectory;
 }
