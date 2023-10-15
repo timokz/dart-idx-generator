@@ -172,13 +172,8 @@ function writeIndexFile(
 }
 
 function isExcludedDir(currentDir: string): boolean {
-  if (
-    excludedDirectoriesRegex.match(currentDir) ||
+  return (excludedDirectoriesRegex.match(currentDir) ||
     checkExcludeConfig().some((dir) => {
       return currentDir.endsWith(dir) || currentDir.endsWith(`${dir}/`);
-    })
-  ) {
-    return true;
-  }
-  return false;
+    })) as boolean;
 }

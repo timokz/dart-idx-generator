@@ -49,6 +49,7 @@
         "dart-idx-generator.excludeDirectories": {
           "type": "array",
           "default" : [],
+          "scope": "resource",
           "description": "Directories that should be excluded from the index file generation",
           "items": {
             "type": "string"

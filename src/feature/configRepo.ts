@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 
 export function getConfig<T>(settingName: string, defaultVal: any = null): T {
   return vscode.workspace
-    .getConfiguration("dartIndexGenerator")
+    .getConfiguration("dart-idx-generator")
     .get(settingName, defaultVal);
 }
 
