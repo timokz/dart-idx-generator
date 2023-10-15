@@ -3,9 +3,9 @@
   "displayName": "dart_idx_generator",
   "description": "Generate index.dart files for your Flutter and Dart Projects.",
   "publisher": "timokz",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "license": "MIT",
-  "icon" : "dart-idx.png",
+  "icon": "dart-idx.png",
   "engines": {
     "vscode": "^1.82.0"
   },
@@ -48,15 +48,14 @@
       "properties": {
         "dart-idx-generator.excludeDirectories": {
           "type": "array",
-          "default" : [],
+          "default": [],
           "scope": "resource",
           "description": "Directories that should be excluded from the index file generation",
           "items": {
             "type": "string"
           }
         },
-        "dart_idx_generator.generateFileOnsave"
-        : {
+        "dart_idx_generator.generateFileOnsave": {
           "type": "boolean",
           "default": true,
           "description": "Generate index.dart file on save"
@@ -78,7 +77,6 @@
           "type": "boolean",
           "default": true,
           "description": "Include subdirectories in the index file generation"
-
         },
         "dart-idx-generator.scope": {
           "type": "string",
@@ -120,6 +118,5 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
