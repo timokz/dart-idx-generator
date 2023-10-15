@@ -19,7 +19,7 @@
   "activationEvents": [
     "onLanguage:dart"
   ],
-  "main": "./dist/extension.js",
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
@@ -46,9 +46,11 @@
     "configuration": {
       "title": "Dart Index Generator",
       "properties": {
-        "dart-idx-generator.excludeFolders": {
+        "dart-idx-generator.excludeDirectories": {
           "type": "array",
-          "description": "Folders that should be excluded from the index file generation",
+          "default" : [],
+          "scope": "resource",
+          "description": "Directories that should be excluded from the index file generation",
           "items": {
             "type": "string"
           }
@@ -56,41 +58,32 @@
         "dart_idx_generator.generateFileOnsave"
         : {
           "type": "boolean",
-          "description": "Generate index.dart file on save",
-          "default": true
+          "default": true,
+          "description": "Generate index.dart file on save"
         },
         "dart-idx-generator.fileName": {
           "type": "string",
+          "default": "index.dart",
           "markdownEnumDescriptions": [
             "The index file will be named `index.dart`",
             "The index file will be named `${package_name}.dart`"
           ],
           "description": "Name scheme of the index file",
-          "default": "index.dart",
           "enum": [
             "index.dart",
             "${package_name}.dart"
           ]
         },
-        "dart-idx-generator.includeSubfolders": {
+        "dart-idx-generator.includeSubdirectories": {
           "type": "boolean",
-          "description": "Include subfolders in the index file generation",
-          "default": true
+          "default": true,
+          "description": "Include subdirectories in the index file generation"
+
         },
         "dart-idx-generator.scope": {
           "type": "string",
-          "description": "Specify the scope for index file generation (e.g., lib/)",
           "default": "lib/",
-          "enum": [
-            {
-              "value": "__file_picker__",
-              "description": "Open File Picker"
-            },
-            {
-              "value": "__edit_settings__",
-              "description": "Edit in settings.json"
-            }
-          ]
+          "description": "Specify the scope for index file generation (e.g., lib/)"
         }
       }
     }

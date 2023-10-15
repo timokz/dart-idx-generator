@@ -1,26 +1,27 @@
-import exp = require("constants");
 import * as vscode from "vscode";
 
+export function getConfig<T>(settingName: string, defaultVal: any = null): T {
+  return vscode.workspace
+    .getConfiguration("dart-idx-generator")
+    .get(settingName, defaultVal);
+}
+
+export function checkExcludeConfig(): string[] {
+  return getConfig("excludeDirectories", []);
+}
+
 export function checkNameConfigDefault(): boolean {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
-
-  const fileName = config.get("fileName", "index.dart");
-
-  return fileName === "index.dart";
+  return getConfig("fileName", "index.dart") === "index.dart";
 }
 
 export function checkEntryPointConfig(): string {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
-
-  const entryPoint = config.get("entryPoint", "lib/");
-
-  return entryPoint;
+  return getConfig("entryPoint", "lib/");
 }
 
 export function checkOnSaveConfig(): boolean {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
+  return getConfig("generateOnSave", true);
+}
 
-  const onSave = config.get("generateOnSave", true);
-
-  return onSave;
+export function checkSubDirectoriesConfig(): boolean {
+  return getConfig("includeSubdirectories", true);
 }

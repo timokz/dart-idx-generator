@@ -11,14 +11,18 @@ export async function deleteAllIndexFiles(): Promise<void> {
     !vscode.workspace.workspaceFolders ||
     vscode.workspace.workspaceFolders.length === 0
   ) {
-    vscode.window.showErrorMessage("No workspace containing folders is open");
+    vscode.window.showErrorMessage(
+      "No workspace containing directories is open"
+    );
     return;
   }
   const workspace = vscode.workspace.workspaceFolders[0].uri;
 
-  // ask for confirmation
-  //   const confirmation = await vscode.window.showWarningMessage('Are you sure you want to delete all index files?', 'Yes', 'No');
-  const confirmation = "Yes"; // TODO debugging only
+  const confirmation = await vscode.window.showWarningMessage(
+    "Are you sure you want to delete all index files?",
+    "Yes",
+    "No"
+  );
   if (confirmation !== "Yes") {
     return;
   }

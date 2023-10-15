@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { findRoot, getCurrentFolder, getFiles } from "../../utils/util";
+import { findRoot, getCurrentDirectory, getFiles } from "../../utils/util";
 
 export async function selectEntryPoint(): Promise<void> {
   const config = vscode.workspace.getConfiguration("dartIndexGenerator");
@@ -7,7 +7,7 @@ export async function selectEntryPoint(): Promise<void> {
   var scope = config.get<string>("scope") || "lib/";
 
   const options: vscode.QuickPickOptions = {
-    placeHolder: "Select the folder containing the entry point",
+    placeHolder: "Select the directory containing the entry point",
     canPickMany: false,
     onDidSelectItem: (item) => {
       console.log("Selected item: " + item);
@@ -20,13 +20,13 @@ export async function selectEntryPoint(): Promise<void> {
       console.log("Selected file: " + fileUri[0].fsPath);
     }
   });
-  // path to the current folder, use workspace folder if no file is open
-  const currentFolder =
-    getCurrentFolder() ||
+  // path to the current directory, use workspace directory if no file is open
+  const currentdirectory =
+    getCurrentDirectory() ||
     (vscode.workspace.workspaceFolders &&
       vscode.workspace.workspaceFolders[0]?.uri.fsPath);
 
-  const current = await findRoot(currentFolder || "", ".dart");
+  const current = await findRoot(currentdirectory || "", ".dart");
 
   const dartFiles = await getFiles(current, ".dart");
 
@@ -43,17 +43,17 @@ export async function selectEntryPoint2(): Promise<void> {
   if (scope === "lib/") {
     return;
   } else if (scope === "__file_picker__") {
-    const selectedFolder = await vscode.window.showOpenDialog(options);
+    const selecteddirectory = await vscode.window.showOpenDialog(options);
 
-    if (selectedFolder && selectedFolder.length > 0) {
-      // Update the configuration with the selected folder
+    if (selecteddirectory && selecteddirectory.length > 0) {
+      // Update the configuration with the selected directory
       await config.update(
         "scope",
-        selectedFolder[0].fsPath,
+        selecteddirectory[0].fsPath,
         vscode.ConfigurationTarget.Workspace
       );
     } else {
-      vscode.window.showInformationMessage("No folder selected.");
+      vscode.window.showInformationMessage("No directory selected.");
     }
   } else if (scope === "__edit_settings__") {
     // Open settings.json for editing
@@ -71,7 +71,7 @@ const options: vscode.OpenDialogOptions = {
   canSelectFiles: false,
   canSelectFolders: true,
   canSelectMany: false,
-  openLabel: "Select entrypoint folder to generate index file in",
+  openLabel: "Select entrypoint directory to generate index file in",
 };
 
 function config() {

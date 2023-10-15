@@ -6,7 +6,7 @@ import { checkOnSaveConfig } from "./feature/configRepo";
 import { deleteAllIndexFiles } from "./feature/deleteIndexFiles";
 import {
   generateIndexFile,
-  generateIndexFilesForAllFolders,
+  generateIndexFilesForAllDirectories,
 } from "./feature/generateIndexFile";
 import { selectEntryPoint } from "./utils/util";
 
@@ -23,7 +23,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "dart-idx-generator.generateFiles",
-      generateIndexFilesForAllFolders
+      generateIndexFilesForAllDirectories
     )
   );
 
@@ -45,17 +45,11 @@ export async function activate(context: vscode.ExtensionContext) {
     log("onDidChangeConfiguration");
     if (event.affectsConfiguration("dartIndexGenerator.scope")) {
       selectEntryPoint();
-      vscode.window.showInformationMessage(
-        "dartIndexGenerator configuration changed"
-      );
     }
   });
 
   vscode.workspace.onDidSaveTextDocument((document) => {
     if (checkOnSaveConfig() && document.languageId === "dart") {
-      vscode.window.showInformationMessage(
-        `Generated Index for ${document.fileName}`
-      );
       generateIndexFile();
     }
   });

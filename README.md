@@ -19,13 +19,12 @@ Upcoming Feature: choose between index files, and export statements at the top o
 Customization is availabe through the following settings:
 
 
-- **Exclude Folders**
-  - Folders that should be excluded from the index file generation.
-- **Include Subfolders**
-  - Include subfolders in the index file generation.
+- **Exclude Directories**
+  - Directories that should be excluded from the index file generation.
+- **Include Subdirectories**
+  - Include subdirectories in the index file generation.
 - **File Name**
-    - Name your barrel files `"index.dart"` or like the directory they're in`"${package_name}.dart"`
-
+  - Name your barrel files `"index.dart"` or like the directory they're in`"${package_name}.dart"`
 
 
 - **Scope**
