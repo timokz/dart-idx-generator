@@ -19,23 +19,6 @@ export async function getDirectories(workspace: string): Promise<string[]> {
   }
 }
 
-export async function getRelevantDirectories(
-  workspace: string
-): Promise<string[]> {
-  try {
-    const directories = await getDirectories(workspace);
-
-    // #TODO extend criteria
-    const relevantDirectories = directories.filter((directory) => {
-      return !directory.startsWith(".") && !directory.includes("build");
-    });
-
-    return relevantDirectories;
-  } catch (error) {
-    throw error;
-  }
-}
-
 /** Get all files in the given directory with the given extension,
  * ignoring generated files
  */
@@ -56,7 +39,7 @@ export async function getFiles(
 }
 
 /** Get the path to the first file with the given extension in the given workspace,
- *   if there is no default directory like src or lib
+ *  if there is no default directory like src or lib
  */
 export async function findRoot(
   workspace: string,
