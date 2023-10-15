@@ -6,7 +6,7 @@ import { checkOnSaveConfig } from "./feature/configRepo";
 import { deleteAllIndexFiles } from "./feature/deleteIndexFiles";
 import {
   generateIndexFile,
-  generateIndexFilesForAllFolders,
+  generateIndexFilesForAllDirectories,
 } from "./feature/generateIndexFile";
 import { selectEntryPoint } from "./utils/util";
 
@@ -23,7 +23,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "dart-idx-generator.generateFiles",
-      generateIndexFilesForAllFolders
+      generateIndexFilesForAllDirectories
     )
   );
 

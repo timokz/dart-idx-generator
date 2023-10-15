@@ -46,10 +46,10 @@
     "configuration": {
       "title": "Dart Index Generator",
       "properties": {
-        "dart-idx-generator.excludeFolders": {
+        "dart-idx-generator.excludeDirectories": {
           "type": "array",
           "default" : [],
-          "description": "Folders that should be excluded from the index file generation",
+          "description": "Directories that should be excluded from the index file generation",
           "items": {
             "type": "string"
           }
@@ -73,10 +73,10 @@
             "${package_name}.dart"
           ]
         },
-        "dart-idx-generator.includeSubfolders": {
+        "dart-idx-generator.includeSubdirectories": {
           "type": "boolean",
           "default": true,
-          "description": "Include subfolders in the index file generation"
+          "description": "Include subdirectories in the index file generation"
 
         },
         "dart-idx-generator.scope": {

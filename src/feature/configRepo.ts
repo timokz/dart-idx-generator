@@ -1,42 +1,27 @@
-import exp = require("constants");
 import * as vscode from "vscode";
 
+export function getConfig<T>(settingName: string, defaultVal: any = null): T {
+  return vscode.workspace
+    .getConfiguration("dartIndexGenerator")
+    .get(settingName, defaultVal);
+}
+
 export function checkExcludeConfig(): string[] {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
-
-  const excludes = config.get("excludeDirectories", []);
-
-  return excludes;
+  return getConfig("excludeDirectories", []);
 }
 
 export function checkNameConfigDefault(): boolean {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
-
-  const fileName = config.get("fileName", "index.dart");
-
-  return fileName === "index.dart";
+  return getConfig("fileName", "index.dart") === "index.dart";
 }
 
 export function checkEntryPointConfig(): string {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
-
-  const entryPoint = config.get("entryPoint", "lib/");
-
-  return entryPoint;
+  return getConfig("entryPoint", "lib/");
 }
 
 export function checkOnSaveConfig(): boolean {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
-
-  const onSave = config.get("generateOnSave", true);
-
-  return onSave;
+  return getConfig("generateOnSave", true);
 }
 
 export function checkSubDirectoriesConfig(): boolean {
-  const config = vscode.workspace.getConfiguration("dart-idx-generator");
-
-  const subDirectory = config.get("includeSubdirectories", true);
-
-  return subDirectory;
+  return getConfig("includeSubdirectories", true);
 }
