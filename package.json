@@ -3,9 +3,9 @@
   "displayName": "dart_idx_generator",
   "description": "Generate index.dart files for your Flutter and Dart Projects.",
   "publisher": "timokz",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "license": "MIT",
-  "icon" : "dart-idx.png",
+  "icon": "dart-idx.png",
   "engines": {
     "vscode": "^1.82.0"
   },
@@ -53,8 +53,7 @@
             "type": "string"
           }
         },
-        "dart_idx_generator.generateFileOnsave"
-        : {
+        "dart_idx_generator.generateFileOnsave": {
           "type": "boolean",
           "description": "Generate index.dart file on save",
           "default": true
@@ -127,6 +126,5 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
